@@ -1,0 +1,22 @@
+﻿version: "3"
+
+services:
+  api:
+    image: c-sharp-dotnet-development-lab-3ai-project
+    build:
+      context: .
+      dockerfile: c-sharp-dotnet-development-lab-3AI-project/Dockerfile
+    ports:
+      - "5279:80"
+  database:
+    image: mysql
+    container_name: mysqldatabase
+    environment:
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=pw
+      - MYSQL_DATABASE=app
+      - MYSQL_ROOT_PASSWORD=pw
+    volumes:
+      - ./mysqldata:/var/lib/mysql
+    ports:
+      - "3306:3306"

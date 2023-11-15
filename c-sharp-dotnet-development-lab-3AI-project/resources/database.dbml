@@ -1,0 +1,46 @@
+﻿// https://dbdiagram.io/d
+
+Table User {
+  id integer [primary key]
+  created_at timestamp
+
+  password string
+  username string
+}
+
+Table UserGroup {
+  created_at timestamp
+
+  user_id integer [ref: > User.id]
+  group_id integer [ref: > Group.id]
+}
+
+Table Group {
+  id integer [primary key]
+  created_at timestamp
+
+  name string
+}
+
+Table PaymentRecords {
+  id integer [primary key]
+  created_at timestamp
+
+  user_id integer [ref: > User.id]
+  payment_id integer [ref: > Payment.id]
+}
+
+enum Payment.Type {
+  purchase
+  repayment
+}
+
+Table Payment {
+  id integer [primary key]
+  created_at timestamp
+
+  type Payment.Type
+  group_id integer [ref: > Group.id]
+  name string
+  description string
+}

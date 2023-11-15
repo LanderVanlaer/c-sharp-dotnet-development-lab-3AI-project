@@ -1,0 +1,25 @@
+# This is a generated file. Not intended for manual editing.
+version: "3"
+services:
+  api:
+    build:
+      context: "C:\\Users\\lande\\RiderProjects\\c-sharp-dotnet-development-lab-3AI-project"
+      dockerfile: "c-sharp-dotnet-development-lab-3AI-project/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net7.0/c-sharp-dotnet-development-lab-3AI-project.dll"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+      NUGET_PACKAGES: "C:\\Users\\lande\\.nuget\\packages"
+      NUGET_FALLBACK_PACKAGES: "C:\\Users\\lande\\.nuget\\packages"
+    image: "c-sharp-dotnet-development-lab-3ai-project:dev"
+    ports: []
+    volumes:
+    - "C:\\Users\\lande\\.nuget\\packages:/root/.nuget/fallbackpackages"
+    - "C:\\Users\\lande\\RiderProjects\\c-sharp-dotnet-development-lab-3AI-project\\\
+      c-sharp-dotnet-development-lab-3AI-project:/app:rw"
+    - "C:\\Users\\lande\\RiderProjects\\c-sharp-dotnet-development-lab-3AI-project:/src:rw"
+    working_dir: "/app"
