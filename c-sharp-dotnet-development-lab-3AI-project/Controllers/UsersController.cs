@@ -3,12 +3,15 @@ using c_sharp_dotnet_development_lab_3AI_project.database.entities.user;
 using c_sharp_dotnet_development_lab_3AI_project.database.entities.user.dto;
 using c_sharp_dotnet_development_lab_3AI_project.Services;
 using c_sharp_dotnet_development_lab_3AI_project.Services.MySql;
+using c_sharp_dotnet_development_lab_3AI_project.utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace c_sharp_dotnet_development_lab_3AI_project.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("/users")]
 public class UsersController : ControllerBase
@@ -37,6 +40,7 @@ public class UsersController : ControllerBase
         return user == null ? NotFound() : Ok(_mapper.Map<UserReadDto>(user));
     }
 
+    [AllowAnonymous]
     [HttpPost("")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]

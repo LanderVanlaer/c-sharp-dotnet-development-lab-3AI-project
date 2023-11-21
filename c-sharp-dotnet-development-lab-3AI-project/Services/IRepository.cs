@@ -9,4 +9,5 @@ public interface IRepository
 
     Task<int> SaveChanges();
     User? GetUser(Guid id);
+    User? GetUserByUserName(string username);
 }

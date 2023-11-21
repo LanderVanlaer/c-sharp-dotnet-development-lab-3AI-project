@@ -16,4 +16,5 @@ public class DatabaseRepository : IRepository
     public async Task<int> SaveChanges() => await _context.SaveChangesAsync();
 
     public User? GetUser(Guid id) => _context.Users.Find(id);
+    public User? GetUserByUserName(string username) => _context.Users.FirstOrDefault(u => u.Username == username);
 }

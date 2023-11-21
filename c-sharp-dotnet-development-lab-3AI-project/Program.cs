@@ -1,7 +1,10 @@
 using System.Configuration;
+using System.Text;
 using c_sharp_dotnet_development_lab_3AI_project.database;
 using c_sharp_dotnet_development_lab_3AI_project.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +26,20 @@ builder.Services.AddDbContext<DatabaseContext>(opt =>
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,
+        options =>
+        {
+            builder.Configuration.Bind("JwtSettings", options);
+
+            options.TokenValidationParameters.IssuerSigningKey =
+                new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:SigningKey"] ??
+                                           throw new InvalidOperationException(
+                                               "Config JwtSettings:SigningKey is null"))
+                );
+        });
+
 WebApplication app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -33,6 +50,8 @@ if (app.Environment.IsDevelopment())
 
 // app.UseHttpsRedirection(); //redirect to https
 
+app.UseAuthentication();
 app.UseAuthorization(); //allow [authorize] attribute in controller
+
 app.MapControllers(); //map all controller classes
 app.Run();
