@@ -11,8 +11,9 @@ public class User
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public DateTime CreatedAt { get; init; }
 
-    public string PasswordHash { get; set; }
-    public string Username { get; set; }
+    [MaxLength] public string PasswordHash { get; set; }
+
+    [MinLength(3)] [MaxLength(32)] public string Username { get; set; }
 
     public ICollection<UserGroup> UserGroups { get; set; }
 }

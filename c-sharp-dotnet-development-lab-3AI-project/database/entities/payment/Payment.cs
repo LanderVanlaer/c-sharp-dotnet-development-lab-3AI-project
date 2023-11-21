@@ -15,8 +15,8 @@ public class Payment
     public DateTime CreatedAt { get; init; }
 
     public PaymentType type { get; init; }
-    public string Name { get; set; }
-    public string Description { get; set; }
+    [MaxLength(64)] public string Name { get; set; }
+    [MaxLength] public string Description { get; set; }
 
     public Guid GroupId { get; init; }
     public Group Group { get; set; } = null!;

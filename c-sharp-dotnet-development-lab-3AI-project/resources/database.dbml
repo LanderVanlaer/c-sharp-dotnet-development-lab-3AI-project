@@ -26,6 +26,8 @@ Table PaymentRecords {
   id integer [primary key]
   created_at timestamp
 
+  amount decimal
+
   user_id integer [ref: > User.id]
   payment_id integer [ref: > Payment.id]
 }

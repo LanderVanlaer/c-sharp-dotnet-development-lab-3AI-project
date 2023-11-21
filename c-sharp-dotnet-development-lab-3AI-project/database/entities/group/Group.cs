@@ -12,7 +12,7 @@ public class Group
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public DateTime CreatedAt { get; init; }
 
-    public string Name { get; set; }
+    [MaxLength(32)] public string Name { get; set; }
 
     public ICollection<UserGroup> UserGroups { get; set; }
     public ICollection<Payment> Payments { get; set; }

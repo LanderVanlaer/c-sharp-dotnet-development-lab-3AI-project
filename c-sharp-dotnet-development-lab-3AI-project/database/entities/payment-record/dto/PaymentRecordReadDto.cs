@@ -9,6 +9,8 @@ public class PaymentRecordReadDto
 
     public DateTime CreatedAt { get; init; }
 
+    public decimal Amount { get; set; }
+
     public Guid UserId { get; init; }
     public User User { get; set; } = null!;
 
