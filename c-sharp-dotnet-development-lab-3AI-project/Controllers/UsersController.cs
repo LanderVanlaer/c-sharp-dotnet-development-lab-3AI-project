@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using c_sharp_dotnet_development_lab_3AI_project.database.entities;
-using c_sharp_dotnet_development_lab_3AI_project.database.entities.dto.user;
+using c_sharp_dotnet_development_lab_3AI_project.database.entities.user;
+using c_sharp_dotnet_development_lab_3AI_project.database.entities.user.dto;
 using c_sharp_dotnet_development_lab_3AI_project.Services;
 using c_sharp_dotnet_development_lab_3AI_project.Services.MySql;
 using Microsoft.AspNetCore.Identity;

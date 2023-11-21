@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using c_sharp_dotnet_development_lab_3AI_project.database.entities.payment;
+using c_sharp_dotnet_development_lab_3AI_project.database.entities.user_group;
 
-namespace c_sharp_dotnet_development_lab_3AI_project.database.entities;
+namespace c_sharp_dotnet_development_lab_3AI_project.database.entities.group;
 
 public class Group
 {

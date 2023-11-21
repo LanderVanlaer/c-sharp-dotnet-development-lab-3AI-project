@@ -1,4 +1,7 @@
-﻿namespace c_sharp_dotnet_development_lab_3AI_project.database.entities.dto.group;
+﻿using c_sharp_dotnet_development_lab_3AI_project.database.entities.payment;
+using c_sharp_dotnet_development_lab_3AI_project.database.entities.user_group;
+
+namespace c_sharp_dotnet_development_lab_3AI_project.database.entities.group.dto;
 
 public class GroupReadDto
 {
