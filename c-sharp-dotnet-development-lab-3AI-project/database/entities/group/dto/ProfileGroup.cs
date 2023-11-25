@@ -7,6 +7,6 @@ public class ProfileGroup : Profile
     public ProfileGroup()
     {
         CreateMap<Group, GroupReadDto>();
-        CreateMap<Group, GroupWriteDto>();
+        CreateMap<GroupWriteDto, Group>();
     }
 }

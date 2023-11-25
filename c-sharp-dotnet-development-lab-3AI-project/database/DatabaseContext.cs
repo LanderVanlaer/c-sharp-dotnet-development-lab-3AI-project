@@ -7,11 +7,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace c_sharp_dotnet_development_lab_3AI_project.database;
 
-public class DatabaseContext : DbContext
+/// <summary>
+///     https://medium.com/@darshana-edirisinghe/entity-framework-performance-improvement-section-1-different-loading-mechanisms-in-entity-3e3ce2affee6
+/// </summary>
+public sealed class DatabaseContext : DbContext
 {
-    public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
-    {
-    }
+    public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options) =>
+        ChangeTracker.LazyLoadingEnabled = false;
 
     public DbSet<Group> Groups { get; set; }
     public DbSet<Payment> Payments { get; set; }
