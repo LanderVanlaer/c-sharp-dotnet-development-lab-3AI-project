@@ -29,19 +29,15 @@ public class UsersController : ControllerBase
         _mapper = mapper;
     }
 
-    [HttpGet("")]
+    [HttpGet("me", Name = nameof(GetUser))]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<IEnumerable<UserReadDto>> GetAllUsers() =>
-        Ok(_mapper.Map<IEnumerable<UserReadDto>>(_repository.GetAllUsers()));
-
-
-    [HttpGet("{id:guid}", Name = nameof(GetUser))]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<UserReadDto> GetUser(Guid id)
+    public ActionResult<UserReadDto> GetUser()
     {
-        User? user = _repository.GetUser(id);
-        return user == null ? ApiResponse.NotFound : Ok(_mapper.Map<UserReadDto>(user));
+        User? user = _repository.GetUser(Auth.Jwt.GetUserId(User));
+
+        if (user == null) throw new Exception("User not found. While using [Authorize] attribute.");
+
+        return Ok(_mapper.Map<UserReadDto>(user));
     }
 
     [AllowAnonymous]
