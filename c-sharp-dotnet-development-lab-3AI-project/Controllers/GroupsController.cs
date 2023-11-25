@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Net;
+using AutoMapper;
 using c_sharp_dotnet_development_lab_3AI_project.database.entities.group;
 using c_sharp_dotnet_development_lab_3AI_project.database.entities.group.dto;
 using c_sharp_dotnet_development_lab_3AI_project.database.entities.user;
@@ -57,6 +58,38 @@ public class GroupsController : ControllerBase
         IEnumerable<User> users = _repository.GetUsersByGroupId(id);
         return Ok(_mapper.Map<IEnumerable<UserReadDto>>(users));
     }
+
+    [HttpPost("{id:guid}/users/{username:alpha}")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public async Task<ActionResult> AddUserToGroup(Guid id, string username)
+    {
+        if (!_repository.UserHasAccessToGroup(Auth.Jwt.GetUserId(User), id))
+            return ApiResponse.Create(HttpStatusCode.NotFound, "No group found with the given id.");
+
+        User? user = _repository.GetUserByUserName(username);
+        if (user == null)
+            return ApiResponse.Create(HttpStatusCode.NotFound, "No user found with the given username.");
+
+        if (user.Id == Auth.Jwt.GetUserId(User))
+            return ApiResponse.Create(HttpStatusCode.Conflict, "You can't add yourself to the group.");
+
+        if (_repository.UserHasAccessToGroup(user.Id, id))
+            return ApiResponse.Create(HttpStatusCode.Conflict, "User is already in the group.");
+
+        UserGroup userGroup = new()
+        {
+            GroupId = id,
+            UserId = user.Id,
+        };
+        _repository.AddUserGroup(userGroup);
+
+        await _repository.SaveChanges();
+
+        return CreatedAtRoute(nameof(GetGroupUsers), new { id }, _mapper.Map<UserReadDto>(user));
+    }
+
 
     [HttpPost("")]
     [ProducesResponseType(StatusCodes.Status201Created)]
