@@ -13,12 +13,15 @@ public interface IRepository
     User? GetUser(Guid id);
     User? GetUserByUserName(string username);
 
+    IEnumerable<User> GetUsersByGroupId(Guid groupId);
+
     void AddUser(User u);
 
     // ==================== GROUPS ====================
     IEnumerable<Group> GetAllGroupsOfUser(Guid userId);
     Group? GetGroup(Guid id);
     Group? GetGroupWithUsersGroups(Guid id);
+    bool UserHasAccessToGroup(Guid userId, Guid groupId);
 
     void AddGroup(Group g);
 

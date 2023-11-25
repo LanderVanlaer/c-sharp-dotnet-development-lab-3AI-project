@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using c_sharp_dotnet_development_lab_3AI_project.database.entities.group;
 using c_sharp_dotnet_development_lab_3AI_project.database.entities.group.dto;
+using c_sharp_dotnet_development_lab_3AI_project.database.entities.user;
 using c_sharp_dotnet_development_lab_3AI_project.database.entities.user_group;
+using c_sharp_dotnet_development_lab_3AI_project.database.entities.user.dto;
 using c_sharp_dotnet_development_lab_3AI_project.Services;
 using c_sharp_dotnet_development_lab_3AI_project.utils;
 using Microsoft.AspNetCore.Authorization;
@@ -28,7 +30,6 @@ public class GroupsController : ControllerBase
     public ActionResult<IEnumerable<GroupReadDto>> GetAllUsersGroups() =>
         Ok(_mapper.Map<IEnumerable<GroupReadDto>>(_repository.GetAllGroupsOfUser(Auth.Jwt.GetUserId(User))));
 
-
     [HttpGet("{id:guid}", Name = nameof(GetGroup))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -43,6 +44,18 @@ public class GroupsController : ControllerBase
         return group.UserGroups.All(userGroup => userGroup.UserId != userId)
             ? ApiResponse.NotFound
             : Ok(_mapper.Map<GroupReadDto>(group));
+    }
+
+    [HttpGet("{id:guid}/users", Name = nameof(GetGroupUsers))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult<IEnumerable<UserReadDto>> GetGroupUsers(Guid id)
+    {
+        if (!_repository.UserHasAccessToGroup(Auth.Jwt.GetUserId(User), id))
+            return ApiResponse.NotFound;
+
+        IEnumerable<User> users = _repository.GetUsersByGroupId(id);
+        return Ok(_mapper.Map<IEnumerable<UserReadDto>>(users));
     }
 
     [HttpPost("")]

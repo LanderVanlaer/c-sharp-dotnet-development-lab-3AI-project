@@ -20,6 +20,9 @@ public class DatabaseRepository : IRepository
     public User? GetUser(Guid id) => _context.Users.Find(id);
     public User? GetUserByUserName(string username) => _context.Users.FirstOrDefault(u => u.Username == username);
 
+    public IEnumerable<User> GetUsersByGroupId(Guid groupId) =>
+        _context.Users.Where(u => u.UserGroups.Any(ug => ug.GroupId == groupId));
+
     public void AddUser(User u) => _context.Users.Add(u);
 
 
@@ -31,6 +34,9 @@ public class DatabaseRepository : IRepository
 
     public Group? GetGroupWithUsersGroups(Guid id) =>
         _context.Groups.Include(group => group.UserGroups).FirstOrDefault(g => g.Id == id);
+
+    public bool UserHasAccessToGroup(Guid userId, Guid groupId) =>
+        _context.UserGroups.Any(ug => ug.UserId == userId && ug.GroupId == groupId);
 
     public void AddGroup(Group g) => _context.Groups.Add(g);
 
