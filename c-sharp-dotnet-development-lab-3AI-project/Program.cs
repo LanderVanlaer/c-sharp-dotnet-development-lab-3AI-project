@@ -1,21 +1,24 @@
 using System.Configuration;
 using System.Text;
 using c_sharp_dotnet_development_lab_3AI_project.database;
+using c_sharp_dotnet_development_lab_3AI_project.filters;
 using c_sharp_dotnet_development_lab_3AI_project.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers(); //add controller classes to be used
+builder.Services.AddControllers(options => { options.Filters.Add<ApiValidationFilterAttribute>(); });
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IRepository, DatabaseRepository>();
 
-string connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"] ??
 #pragma warning disable CS0618 // Type or member is obsolete
+string connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"] ??
                           throw new ConfigurationException(
                               "Could not get \"ConnectionStrings:DefaultConnection\" from appsettings.json"
                           );
@@ -39,6 +42,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                                                "Config JwtSettings:SigningKey is null"))
                 );
         });
+
+//https://mirsaeedi.medium.com/asp-net-core-customize-validation-error-message-9022c12d3d7d
+builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
 
 WebApplication app = builder.Build();
 

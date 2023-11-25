@@ -1,8 +1,10 @@
-﻿using AutoMapper;
+﻿using System.Net;
+using AutoMapper;
 using c_sharp_dotnet_development_lab_3AI_project.database.entities.user;
 using c_sharp_dotnet_development_lab_3AI_project.database.entities.user.dto;
 using c_sharp_dotnet_development_lab_3AI_project.Services;
 using c_sharp_dotnet_development_lab_3AI_project.Services.MySql;
+using c_sharp_dotnet_development_lab_3AI_project.utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +17,9 @@ namespace c_sharp_dotnet_development_lab_3AI_project.Controllers;
 [Route("/users")]
 public class UsersController : ControllerBase
 {
+    private static readonly ActionResult UserAlreadyExistsError =
+        ApiResponse.Create(HttpStatusCode.Conflict, "User already exists.");
+
     private readonly IMapper _mapper;
     private readonly IRepository _repository;
 
@@ -36,7 +41,7 @@ public class UsersController : ControllerBase
     public ActionResult<UserReadDto> GetUser(Guid id)
     {
         User? user = _repository.GetUser(id);
-        return user == null ? NotFound() : Ok(_mapper.Map<UserReadDto>(user));
+        return user == null ? ApiResponse.NotFound : Ok(_mapper.Map<UserReadDto>(user));
     }
 
     [AllowAnonymous]
@@ -56,7 +61,8 @@ public class UsersController : ControllerBase
         }
         catch (DbUpdateException e)
         {
-            if (CustomMySqlHelper.IsMySqlException(e, MySqlExceptionType.Duplicate)) return Conflict();
+            if (CustomMySqlHelper.IsMySqlException(e, MySqlExceptionType.Duplicate))
+                return UserAlreadyExistsError;
 
             throw;
         }

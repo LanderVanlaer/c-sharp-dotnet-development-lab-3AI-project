@@ -4,6 +4,7 @@ using System.Text;
 using c_sharp_dotnet_development_lab_3AI_project.database.entities.auth.dto;
 using c_sharp_dotnet_development_lab_3AI_project.database.entities.user;
 using c_sharp_dotnet_development_lab_3AI_project.Services;
+using c_sharp_dotnet_development_lab_3AI_project.utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -34,7 +35,7 @@ public class AuthController : ControllerBase
     {
         User? user = AuthenticateUser(dto);
 
-        if (user == null) return Unauthorized();
+        if (user == null) return ApiResponse.Unauthorized;
 
         string tokenString = GenerateJwtToken(user);
 
