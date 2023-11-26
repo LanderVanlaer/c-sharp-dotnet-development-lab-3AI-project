@@ -47,6 +47,29 @@ public class GroupsController : ControllerBase
             : Ok(_mapper.Map<GroupReadDto>(group));
     }
 
+    [HttpPatch("{id:guid}", Name = nameof(UpdateGroup))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult<GroupReadDto> UpdateGroup(Guid id, GroupUpdateDto dto)
+    {
+        Group? group = _repository.GetGroupWithUsersGroups(id);
+        if (group == null) return ApiResponse.NotFound;
+
+        Guid userId = Auth.Jwt.GetUserId(User);
+        if (group.UserGroups.All(userGroup => userGroup.UserId != userId))
+            return ApiResponse.NotFound;
+
+        if (dto.Name == null)
+            return Ok(_mapper.Map<GroupReadDto>(group));
+
+
+        group.Name = dto.Name;
+
+        _repository.SaveChanges();
+
+        return Ok(_mapper.Map<GroupReadDto>(group));
+    }
+
     [HttpGet("{id:guid}/users", Name = nameof(GetGroupUsers))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
