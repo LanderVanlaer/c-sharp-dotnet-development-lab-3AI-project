@@ -65,4 +65,30 @@ public class UsersController : ControllerBase
 
         return CreatedAtRoute(nameof(GetUser), new { user.Id }, _mapper.Map<UserReadDto>(user));
     }
+
+    [HttpPatch("me")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public async Task<ActionResult> UpdateUser(UserUpdateDto dto)
+    {
+        User? user = _repository.GetUser(Auth.Jwt.GetUserId(User));
+        if (user == null) throw new Exception("User not found. While using [Authorize] attribute.");
+
+        if (dto.Username is not null) user.Username = dto.Username;
+        if (dto.Password is not null) user.PasswordHash = new PasswordHasher<User>().HashPassword(user, dto.Password);
+
+        try
+        {
+            await _repository.SaveChanges();
+        }
+        catch (DbUpdateException e)
+        {
+            if (CustomMySqlHelper.IsMySqlException(e, MySqlExceptionType.Duplicate))
+                return UserAlreadyExistsError;
+
+            throw;
+        }
+
+        return Ok(_mapper.Map<UserReadDto>(user));
+    }
 }
