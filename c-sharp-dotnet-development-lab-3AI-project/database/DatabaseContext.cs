@@ -15,11 +15,11 @@ public sealed class DatabaseContext : DbContext
     public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options) =>
         ChangeTracker.LazyLoadingEnabled = false;
 
-    public DbSet<Group> Groups { get; set; }
-    public DbSet<Payment> Payments { get; set; }
-    public DbSet<PaymentRecord> PaymentRecords { get; set; }
-    public DbSet<User> Users { get; set; }
-    public DbSet<UserGroup> UserGroups { get; set; }
+    public DbSet<Group> Groups { get; set; } = null!;
+    public DbSet<Payment> Payments { get; set; } = null!;
+    public DbSet<PaymentRecord> PaymentRecords { get; set; } = null!;
+    public DbSet<User> Users { get; set; } = null!;
+    public DbSet<UserGroup> UserGroups { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
