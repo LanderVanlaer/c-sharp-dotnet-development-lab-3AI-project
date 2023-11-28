@@ -1,5 +1,6 @@
 ﻿using c_sharp_dotnet_development_lab_3AI_project.database;
 using c_sharp_dotnet_development_lab_3AI_project.database.entities.group;
+using c_sharp_dotnet_development_lab_3AI_project.database.entities.payment;
 using c_sharp_dotnet_development_lab_3AI_project.database.entities.user;
 using c_sharp_dotnet_development_lab_3AI_project.database.entities.user_group;
 using Microsoft.EntityFrameworkCore;
@@ -42,4 +43,16 @@ public class DatabaseRepository : IRepository
 
     // ================= USER GROUPS =================
     public void AddUserGroup(UserGroup userGroup) => _context.UserGroups.Add(userGroup);
+
+    // =================== PAYMENTS ===================
+    public Payment? GetPayment(Guid paymentId) => _context.Payments.Find(paymentId);
+
+    public Payment? GetPaymentWithPaymentRecords(Guid paymentId) => _context.Payments
+        .Include(payment => payment.PaymentRecords)
+        .FirstOrDefault(payment => payment.Id == paymentId);
+
+    public void AddPayment(Payment payment) => _context.Payments.Add(payment);
+
+    public IEnumerable<Payment> GetPaymentsOfGroup(Guid groupId) =>
+        _context.Payments.Where(payment => payment.GroupId == groupId);
 }

@@ -1,4 +1,5 @@
 ﻿using c_sharp_dotnet_development_lab_3AI_project.database.entities.group;
+using c_sharp_dotnet_development_lab_3AI_project.database.entities.payment;
 using c_sharp_dotnet_development_lab_3AI_project.database.entities.user;
 using c_sharp_dotnet_development_lab_3AI_project.database.entities.user_group;
 
@@ -27,4 +28,10 @@ public interface IRepository
 
     // ================= USER GROUPS =================
     void AddUserGroup(UserGroup userGroup);
+
+    // =================== PAYMENTS ===================
+    Payment? GetPayment(Guid paymentId);
+    Payment? GetPaymentWithPaymentRecords(Guid paymentId);
+    void AddPayment(Payment payment);
+    IEnumerable<Payment> GetPaymentsOfGroup(Guid groupId);
 }
