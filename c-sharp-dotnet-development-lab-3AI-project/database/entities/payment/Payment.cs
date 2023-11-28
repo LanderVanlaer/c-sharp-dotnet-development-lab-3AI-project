@@ -26,6 +26,6 @@ public class Payment
 
 public enum PaymentType
 {
-    PURCHASE = 0,
-    REPAYMENT = 1,
+    PURCHASE = 1,
+    REPAYMENT = 2,
 }
