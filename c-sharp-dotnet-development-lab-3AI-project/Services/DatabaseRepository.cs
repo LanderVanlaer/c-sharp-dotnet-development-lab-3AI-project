@@ -53,6 +53,13 @@ public class DatabaseRepository : IRepository
 
     public void AddPayment(Payment payment) => _context.Payments.Add(payment);
 
+    public void UpdatePayment(Payment payment) => _context.Payments.Update(payment);
+
     public IEnumerable<Payment> GetPaymentsOfGroup(Guid groupId) =>
         _context.Payments.Where(payment => payment.GroupId == groupId);
+
+
+    // =============== PAYMENT RECORDS ===============
+    public int DeletePaymentRecordsOfPayment(Guid paymentId) =>
+        _context.PaymentRecords.Where(pr => pr.PaymentId == paymentId).ExecuteDelete();
 }

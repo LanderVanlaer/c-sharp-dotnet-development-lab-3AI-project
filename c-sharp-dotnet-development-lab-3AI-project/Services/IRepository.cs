@@ -33,5 +33,9 @@ public interface IRepository
     Payment? GetPayment(Guid paymentId);
     Payment? GetPaymentWithPaymentRecords(Guid paymentId);
     void AddPayment(Payment payment);
+    void UpdatePayment(Payment payment);
     IEnumerable<Payment> GetPaymentsOfGroup(Guid groupId);
+
+    // =============== PAYMENT RECORDS ===============
+    int DeletePaymentRecordsOfPayment(Guid paymentId);
 }

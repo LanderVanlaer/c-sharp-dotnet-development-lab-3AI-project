@@ -14,11 +14,11 @@ public class Payment
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public DateTime CreatedAt { get; init; }
 
-    public PaymentType type { get; init; }
+    public PaymentType Type { get; set; }
     [MaxLength(64)] public string Name { get; set; }
     [MaxLength] public string Description { get; set; }
 
-    public Guid GroupId { get; init; }
+    public Guid GroupId { get; set; }
     public Group Group { get; set; } = null!;
 
     public ICollection<PaymentRecord> PaymentRecords { get; set; }

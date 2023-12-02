@@ -65,29 +65,19 @@ public class GroupPaymentsController : ControllerBase
         if (group == null) return ApiResponse.NotFound;
 
         Guid userId = Auth.Jwt.GetUserId(User);
-        if (group.UserGroups.All(userGroup => userGroup.UserId != userId))
-            return ApiResponse.NotFound;
+        if (!group.IncludesUser(userId)) return ApiResponse.NotFound;
 
         dto.PaymentRecords = dto.PaymentRecords.Where(record => record.Amount != 0).ToArray();
-
-        if (dto.PaymentRecords.Length == 0)
-            return ApiResponse.Create(HttpStatusCode.BadRequest, "PaymentRecords cannot be empty");
-
-        if (dto.PaymentRecords.Length != dto.PaymentRecords.Select(record => record.UserId).Distinct().Count())
-            return ApiResponse.Create(HttpStatusCode.BadRequest, "PaymentRecords cannot contain duplicate UserId");
 
         if (dto.PaymentRecords.Any(record => group.UserGroups.All(userGroup => userGroup.UserId != record.UserId)))
             return ApiResponse.Create(HttpStatusCode.BadRequest,
                 "PaymentRecords cannot contain UserId that is not in the group");
 
-        if (dto.PaymentRecords.Select(paymentRecordWriteDto => paymentRecordWriteDto.Amount).Sum() != 0)
-            return ApiResponse.Create(HttpStatusCode.BadRequest, "PaymentRecords amounts must sum to 0");
-
         Payment payment = new()
         {
-            type = dto.Type,
-            Description = dto.Description,
             Name = dto.Name,
+            Type = dto.Type,
+            Description = dto.Description,
             GroupId = groupId,
             PaymentRecords = dto.PaymentRecords
                 .Select(record => new PaymentRecord
@@ -102,5 +92,44 @@ public class GroupPaymentsController : ControllerBase
 
         return CreatedAtRoute(nameof(GetPayment), new { paymentId = payment.Id, groupId },
             _mapper.Map<PaymentReadDto>(payment));
+    }
+
+    [HttpPut("{paymentId:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult<PaymentReadDto> UpdateGroupPayment(Guid groupId, Guid paymentId, PaymentWriteDto dto)
+    {
+        Guid userId = Auth.Jwt.GetUserId(User);
+
+        Group? group = _repository.GetGroupWithUsersGroups(groupId);
+        if (group == null || !group.IncludesUser(userId))
+            return ApiResponse.NotFound;
+
+        Payment? payment = _repository.GetPayment(paymentId);
+        if (payment == null || payment.GroupId != groupId)
+            return ApiResponse.NotFound;
+
+        dto.PaymentRecords = dto.PaymentRecords.Where(record => record.Amount != 0).ToArray();
+
+        if (dto.PaymentRecords.Any(record => group.UserGroups.All(userGroup => userGroup.UserId != record.UserId)))
+            return ApiResponse.Create(HttpStatusCode.BadRequest,
+                "PaymentRecords cannot contain UserId that is not in the group");
+
+        payment.Type = dto.Type;
+        payment.Description = dto.Description;
+        payment.Name = dto.Name;
+        payment.PaymentRecords = dto.PaymentRecords
+            .Select(record => new PaymentRecord
+            {
+                Amount = record.Amount,
+                UserId = record.UserId,
+            }).ToList();
+
+        _repository.DeletePaymentRecordsOfPayment(paymentId);
+        _repository.SaveChanges();
+        _repository.UpdatePayment(payment);
+        _repository.SaveChanges();
+
+        return Ok(payment);
     }
 }
