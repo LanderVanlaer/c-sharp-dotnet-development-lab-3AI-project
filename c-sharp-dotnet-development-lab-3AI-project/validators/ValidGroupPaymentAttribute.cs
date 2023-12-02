@@ -20,7 +20,7 @@ public class ValidGroupPaymentAttribute : ValidationAttribute
                                         " cannot contain duplicate " +
                                         nameof(PaymentRecord.UserId));
 
-        if (dto.PaymentRecords.Select(paymentRecordWriteDto => paymentRecordWriteDto.Amount).Sum() != 0)
+        if (dto.PaymentRecords.Select(paymentRecordWriteDto => paymentRecordWriteDto.Amount).Sum() > 0.01m)
             return new ValidationResult(nameof(Payment.PaymentRecords) + " amounts must sum to 0");
 
         return ValidationResult.Success;
