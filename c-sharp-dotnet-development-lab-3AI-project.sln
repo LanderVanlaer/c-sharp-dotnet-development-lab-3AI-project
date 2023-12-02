@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "c-sharp-dotnet-development-lab-3AI-project", "c-sharp-dotnet-development-lab-3AI-project\c-sharp-dotnet-development-lab-3AI-project.csproj", "{331F9EF9-8560-46F8-A3F3-B6864973CF4A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "web-api", "web-api\web-api.csproj", "{331F9EF9-8560-46F8-A3F3-B6864973CF4A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{106AAA4A-6390-4C0D-9DC7-DF6A9798CA35}"
 	ProjectSection(SolutionItems) = preProject

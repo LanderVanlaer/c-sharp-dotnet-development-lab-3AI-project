@@ -2,10 +2,10 @@
 
 services:
   api:
-    image: c-sharp-dotnet-development-lab-3ai-project
+    image: web-api
     build:
       context: .
-      dockerfile: c-sharp-dotnet-development-lab-3AI-project/Dockerfile
+      dockerfile: web-api/Dockerfile
     ports:
       - "5279:80"
     depends_on:
