@@ -8,6 +8,10 @@ services:
       dockerfile: c-sharp-dotnet-development-lab-3AI-project/Dockerfile
     ports:
       - "5279:80"
+    depends_on:
+      - database
+    networks:
+      - default
   database:
     image: mysql
     container_name: mysqldatabase
@@ -20,3 +24,9 @@ services:
       - ./mysqldata:/var/lib/mysql
     ports:
       - "3306:3306"
+    networks:
+      - default
+
+networks:
+  default:
+    driver: bridge
