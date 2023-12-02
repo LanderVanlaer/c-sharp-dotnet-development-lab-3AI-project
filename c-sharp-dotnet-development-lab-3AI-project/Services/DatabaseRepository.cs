@@ -1,5 +1,6 @@
 ﻿using c_sharp_dotnet_development_lab_3AI_project.database;
 using c_sharp_dotnet_development_lab_3AI_project.database.entities.group;
+using c_sharp_dotnet_development_lab_3AI_project.database.entities.leaderboard.dto;
 using c_sharp_dotnet_development_lab_3AI_project.database.entities.payment;
 using c_sharp_dotnet_development_lab_3AI_project.database.entities.user;
 using c_sharp_dotnet_development_lab_3AI_project.database.entities.user_group;
@@ -62,4 +63,32 @@ public class DatabaseRepository : IRepository
     // =============== PAYMENT RECORDS ===============
     public int DeletePaymentRecordsOfPayment(Guid paymentId) =>
         _context.PaymentRecords.Where(pr => pr.PaymentId == paymentId).ExecuteDelete();
+
+
+    // ================= LEADERBOARD =================
+    public IEnumerable<LeaderboardItemReadDto> GetLeaderboardOfGroup(Guid groupId)
+    {
+        /*
+         * SELECT U.Id, SUM(PR.Amount) AS TotalPaid
+         * FROM Users U
+         *          INNER JOIN app.UserGroups UG on U.Id = UG.UserId
+         *          LEFT JOIN app.PaymentRecords PR on U.Id = PR.UserId
+         *          LEFT JOIN app.Payments P on PR.PaymentId = P.Id
+         * WHERE UG.GroupId = 'groupId'
+         *   AND (P.GroupId = 'groupId' OR P.GroupId IS NULL)
+         * GROUP BY U.Id
+         */
+        return _context.Users
+            .Include(user => user.UserGroups)
+            .Include(user => user.PaymentRecords)
+            .ThenInclude(paymentRecord => paymentRecord.Payment)
+            .Where(user => user.UserGroups.Any(userGroup => userGroup.GroupId == groupId))
+            .Select(user => new LeaderboardItemReadDto
+            {
+                UserId = user.Id,
+                Amount = user.PaymentRecords
+                    .Where(paymentRecord => paymentRecord.Payment.GroupId == groupId)
+                    .Sum(paymentRecord => paymentRecord.Amount),
+            }).ToArray();
+    }
 }

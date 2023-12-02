@@ -1,4 +1,5 @@
 ﻿using c_sharp_dotnet_development_lab_3AI_project.database.entities.group;
+using c_sharp_dotnet_development_lab_3AI_project.database.entities.leaderboard.dto;
 using c_sharp_dotnet_development_lab_3AI_project.database.entities.payment;
 using c_sharp_dotnet_development_lab_3AI_project.database.entities.user;
 using c_sharp_dotnet_development_lab_3AI_project.database.entities.user_group;
@@ -38,4 +39,7 @@ public interface IRepository
 
     // =============== PAYMENT RECORDS ===============
     int DeletePaymentRecordsOfPayment(Guid paymentId);
+
+    // ================= LEADERBOARD =================
+    IEnumerable<LeaderboardItemReadDto> GetLeaderboardOfGroup(Guid groupId);
 }
