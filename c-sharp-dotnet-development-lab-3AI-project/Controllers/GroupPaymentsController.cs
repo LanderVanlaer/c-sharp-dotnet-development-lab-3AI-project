@@ -97,7 +97,8 @@ public class GroupPaymentsController : ControllerBase
     [HttpPut("{paymentId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<PaymentReadDto> UpdateGroupPayment(Guid groupId, Guid paymentId, PaymentWriteDto dto)
+    public async Task<ActionResult<PaymentReadDto>> UpdateGroupPayment(Guid groupId, Guid paymentId,
+        PaymentWriteDto dto)
     {
         Guid userId = Auth.Jwt.GetUserId(User);
 
@@ -126,9 +127,9 @@ public class GroupPaymentsController : ControllerBase
             }).ToList();
 
         _repository.DeletePaymentRecordsOfPayment(paymentId);
-        _repository.SaveChanges();
+        await _repository.SaveChanges();
         _repository.UpdatePayment(payment);
-        _repository.SaveChanges();
+        await _repository.SaveChanges();
 
         return Ok(payment);
     }
