@@ -83,7 +83,7 @@ public class GroupPaymentsController : ControllerBase
         if (dto.PaymentRecords.Select(paymentRecordWriteDto => paymentRecordWriteDto.Amount).Sum() != 0)
             return ApiResponse.Create(HttpStatusCode.BadRequest, "PaymentRecords amounts must sum to 0");
 
-        Payment? payment = new()
+        Payment payment = new()
         {
             type = dto.Type,
             Description = dto.Description,
