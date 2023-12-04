@@ -6,10 +6,8 @@ namespace desktopapplication.ViewModels;
 
 public abstract class BaseViewModel : INotifyPropertyChanged
 {
-    protected readonly IRepository Repository;
+    protected readonly IRepository Repository = DependencyService.Get<IRepository>();
     private bool _isBusy;
-
-    protected BaseViewModel() => Repository = DependencyService.Get<IRepository>();
 
 
     public bool IsBusy
