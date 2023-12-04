@@ -1,4 +1,7 @@
-﻿namespace desktopapplication;
+﻿using desktopapplication.services;
+using desktopapplication.services.api;
+
+namespace desktopapplication;
 
 public partial class App : Application
 {
@@ -6,6 +9,7 @@ public partial class App : Application
     {
         InitializeComponent();
 
+        DependencyService.Register<IRepository, RestApiService>();
         MainPage = new AppShell();
     }
 }
