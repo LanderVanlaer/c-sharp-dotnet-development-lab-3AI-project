@@ -7,16 +7,23 @@
              x:Class="desktopapplication.Views.GroupsView" x:DataType="viewModels:GroupsViewModel">
     <ContentView.Content>
         <StackLayout>
-            <Label Text="Groups" />
             <RefreshView Command="{Binding LoadGroupsCommand}" IsRefreshing="{Binding IsBusy}">
-                <ListView x:Name="GroupsListView" ItemsSource="{Binding Groups}">
+                <ListView x:Name="GroupsListView" ItemsSource="{Binding Groups}"
+                          ItemSelected="GroupsListView_OnItemSelected">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <StackLayout x:DataType="models:Group">
-                                    <Label Text="{Binding Path=Name}" />
-                                    <Label Text="{Binding Path=Id}" />
-                                </StackLayout>
+                                <ViewCell.View>
+                                    <Grid x:DataType="models:Group">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Grid.Column="0" Margin="10" Text="{Binding Path=Name}" />
+                                        <Label Grid.Column="1" Margin="10" Text="{Binding Path=CreatedAt}"
+                                               HorizontalOptions="End" Opacity="0.5" />
+                                    </Grid>
+                                </ViewCell.View>
                             </ViewCell>
                         </DataTemplate>
                     </ListView.ItemTemplate>
