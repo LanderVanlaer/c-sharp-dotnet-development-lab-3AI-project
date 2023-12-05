@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Diagnostics;
+using System.Net;
 using desktopapplication.Models;
 using Newtonsoft.Json;
 
@@ -81,6 +82,8 @@ public class RestApiService : IRepository
     /// </exception>
     private async Task<HttpResponseMessage> MakeRequest(string path, MethodType method, string body = "")
     {
+        Debug.WriteLine($"Making a {Enum.GetName(typeof(MethodType), method)} request to {path}");
+
         _client.DefaultRequestHeaders.Remove("Authorization");
         _client.DefaultRequestHeaders.Add("Authorization", "Bearer " + _jsonWebToken);
 
@@ -126,9 +129,10 @@ public class ApiError : Exception
 {
     public ApiError(string message) : base(message)
     {
+        Debug.WriteLine("ApiError: " + message);
     }
 
-    public ApiError(MethodType methodType, string path, HttpStatusCode status) : base(
+    public ApiError(MethodType methodType, string path, HttpStatusCode status) : this(
         $"Got a {Enum.GetName(typeof(HttpStatusCode), status)}: {status} on {Enum.GetName(typeof(MethodType), methodType)} {path}")
     {
     }
