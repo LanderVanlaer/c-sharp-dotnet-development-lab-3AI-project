@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:desktopapplication.ViewModels"
+             x:Class="desktopapplication.Views.LoginPage" x:DataType="viewModels:LoginViewModel">
+    <ContentPage.Content>
+        <StackLayout>
+            <StackLayout>
+                <Label Text="Username" />
+                <Entry Text="{Binding Username}" />
+            </StackLayout>
+            <StackLayout Margin="0,5">
+                <Label Text="Password" />
+                <Entry Text="{Binding Password}" IsPassword="True" />
+            </StackLayout>
+            <Label Margin="0,5, 0, 10" Text="{Binding Message}"
+                   IsVisible="{Binding Path=HasMessage}" TextColor="OrangeRed" FontAttributes="Bold" />
+            <HorizontalStackLayout>
+                <Button Text="Login" Command="{Binding LoginCommand}" />
+                <ActivityIndicator x:Name="ActivityIndicator" IsRunning="{Binding IsBusy}" />
+            </HorizontalStackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

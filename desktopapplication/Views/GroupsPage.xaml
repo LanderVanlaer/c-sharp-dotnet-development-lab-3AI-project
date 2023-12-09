@@ -4,6 +4,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="desktopapplication.Views.GroupsPage">
     <ContentPage.Content>
-        <Label x:Name="Label"></Label>
+        <Label x:Name="Label" />
     </ContentPage.Content>
 </ContentPage>

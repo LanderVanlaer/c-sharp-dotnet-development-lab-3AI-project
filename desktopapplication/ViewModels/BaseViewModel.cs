@@ -18,11 +18,31 @@ public abstract class BaseViewModel : INotifyPropertyChanged
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    public Task<T> LoadOnTask<T>(Task<T> task)
+    public async Task<T> LoadOnTask<T>(Task<T> task)
     {
         StartLoading();
-        task.ContinueWith(_ => StopLoading());
-        return task;
+        try
+        {
+            return await task;
+        }
+        finally
+        {
+            StopLoading();
+        }
+    }
+
+    public async Task LoadOnTask(Task task)
+    {
+        StartLoading();
+
+        try
+        {
+            await task;
+        }
+        finally
+        {
+            StopLoading();
+        }
     }
 
     public void StartLoading() => IsBusy = true;

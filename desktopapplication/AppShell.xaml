@@ -5,12 +5,19 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:desktopapplication"
-    Shell.FlyoutBehavior="Disabled"
-    Title="desktopapplication">
-
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
-
+    xmlns:views="clr-namespace:desktopapplication.Views"
+    Shell.FlyoutBehavior="Flyout"
+    Title="desktopapplication" x:DataType="local:AppShell">
+    <FlyoutItem x:Name="HomeFlyoutItem" Title="Home" IsVisible="{Binding IsAuthenticated}">
+        <ShellContent ContentTemplate="{DataTemplate local:MainPage}" />
+    </FlyoutItem>
+    <FlyoutItem x:Name="ProfileFlyoutItem" Title="Profile" IsVisible="{Binding IsAuthenticated}">
+        <!--TODO: ProfilePage-->
+        <ShellContent ContentTemplate="{DataTemplate local:MainPage}" />
+    </FlyoutItem>
+    <FlyoutItem x:Name="LoginFlyoutItem" Title="Login" IsVisible="{Binding IsNotAuthenticated}">
+        <ShellContent Title="Login" ContentTemplate="{DataTemplate views:LoginPage}" />
+        <!--TODO: RegisterPage-->
+        <ShellContent Title="Register" ContentTemplate="{DataTemplate views:LoginPage}" />
+    </FlyoutItem>
 </Shell>

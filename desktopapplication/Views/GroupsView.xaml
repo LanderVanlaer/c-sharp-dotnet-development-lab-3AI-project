@@ -16,8 +16,8 @@
                                 <ViewCell.View>
                                     <Grid x:DataType="models:Group">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"></ColumnDefinition>
-                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
                                         <Label Grid.Column="0" Margin="10" Text="{Binding Path=Name}" />
                                         <Label Grid.Column="1" Margin="10" Text="{Binding Path=CreatedAt}"
