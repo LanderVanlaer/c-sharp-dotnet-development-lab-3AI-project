@@ -9,4 +9,5 @@ public interface IRepository : INotifyPropertyChanged
     ICollection<Group>? Groups();
     Task<ICollection<Group>> FetchGroups();
     Task Login(string username, string password);
+    Task<User> Register(string username, string password);
 }

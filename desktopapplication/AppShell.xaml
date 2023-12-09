@@ -17,7 +17,6 @@
     </FlyoutItem>
     <FlyoutItem x:Name="LoginFlyoutItem" Title="Login" IsVisible="{Binding IsNotAuthenticated}">
         <ShellContent Title="Login" ContentTemplate="{DataTemplate views:LoginPage}" />
-        <!--TODO: RegisterPage-->
-        <ShellContent Title="Register" ContentTemplate="{DataTemplate views:LoginPage}" />
+        <ShellContent Title="Registration" ContentTemplate="{DataTemplate views:RegisterPage}" />
     </FlyoutItem>
 </Shell>

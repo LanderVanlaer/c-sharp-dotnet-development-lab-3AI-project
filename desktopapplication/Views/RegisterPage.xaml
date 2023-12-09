@@ -3,7 +3,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModels="clr-namespace:desktopapplication.ViewModels"
-             x:Class="desktopapplication.Views.LoginPage" x:DataType="viewModels:LoginViewModel" Title="Login">
+             x:Class="desktopapplication.Views.RegisterPage" x:DataType="viewModels:RegisterViewModel"
+             Title="Registration">
     <ContentPage.Content>
         <StackLayout>
             <StackLayout>
@@ -14,10 +15,16 @@
                 <Label Text="Password" />
                 <Entry Text="{Binding Password}" IsPassword="True" />
             </StackLayout>
+            <StackLayout Margin="0,5">
+                <Label Text="Confirm Password" />
+                <Entry Text="{Binding PasswordConfirmation}" IsPassword="True" />
+            </StackLayout>
             <Label Margin="0,5, 0, 10" Text="{Binding Message}"
                    IsVisible="{Binding Path=HasMessage}" TextColor="OrangeRed" FontAttributes="Bold" />
+            <Label Margin="0,5, 0, 10" Text="{Binding OkMessage}"
+                   IsVisible="{Binding Path=HasOkMessage}" TextColor="Green" FontAttributes="Bold" />
             <HorizontalStackLayout>
-                <Button Text="Login" Command="{Binding LoginCommand}" />
+                <Button Text="Register" Command="{Binding RegisterCommand}" />
                 <ActivityIndicator x:Name="ActivityIndicator" IsRunning="{Binding IsBusy}" />
             </HorizontalStackLayout>
         </StackLayout>

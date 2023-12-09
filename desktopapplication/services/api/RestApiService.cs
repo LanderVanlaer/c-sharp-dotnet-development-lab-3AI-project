@@ -107,6 +107,42 @@ public class RestApiService : IRepository
     }
 
     /// <summary>
+    ///     Registers the user.
+    /// </summary>
+    /// <param name="username">The username.</param>
+    /// <param name="password">The password.</param>
+    /// <returns>The user.</returns>
+    /// <exception cref="UserNameAlreadyExistsException">If the username already exists.</exception>
+    /// <exception cref="ApiError">If the response is not successful.</exception>
+    public async Task<User> Register(string username, string password)
+    {
+        string body = JsonConvert.SerializeObject(new
+        {
+            username,
+            password,
+        });
+
+        string content;
+        try
+        {
+            content = await (await MakeRequest("users", MethodType.Post, body)).Content.ReadAsStringAsync();
+        }
+        catch (ApiError e)
+        {
+            if (e.Status == HttpStatusCode.Conflict)
+                throw new UserNameAlreadyExistsException();
+            throw;
+        }
+
+        User user = JsonConvert.DeserializeObject<User>(content, _serializerOptions) ??
+                    throw new Exception("No user found");
+
+        Debug.WriteLine($"Registered as {username}");
+
+        return user;
+    }
+
+    /// <summary>
     ///     Makes a request and checks if the response is successful.
     ///     If the response is successful, the response is returned.
     ///     Else an exception is thrown.
@@ -162,7 +198,13 @@ public class RestApiService : IRepository
         if (response.StatusCode == HttpStatusCode.Unauthorized)
             JsonWebToken = null;
 
-        throw new ApiError(method, path, response.StatusCode);
+
+        throw new ApiError(method, path, response.StatusCode,
+            JsonConvert.DeserializeObject<ApiErrorBody>(
+                await response.Content.ReadAsStringAsync(),
+                _serializerOptions
+            )
+        );
     }
 
     #endregion
@@ -212,12 +254,17 @@ public enum MethodType
     Delete = 4,
 }
 
-public class ApiError(MethodType method, string path, HttpStatusCode status) : BaseException(
-    $"Got a {Enum.GetName(typeof(HttpStatusCode), status)}: {status} on {Enum.GetName(typeof(MethodType), method)} {path}")
+public class ApiError(MethodType method, string path, HttpStatusCode status, ApiErrorBody? body = null)
+    : BaseException(body == null
+        ? $"Got a {Enum.GetName(typeof(HttpStatusCode), status)}: {status} on {Enum.GetName(typeof(MethodType), method)} {path}"
+        : body.Title)
 {
-    public HttpStatusCode Status { get; } = status;
-    public string Path { get; } = path;
-    public MethodType Method { get; } = method;
+    public readonly ApiErrorBody? Body = body;
+    public readonly MethodType Method = method;
+    public readonly string Path = path;
+    public readonly HttpStatusCode Status = status;
 }
 
 public class WrongLoginCredentialsException() : BaseException("Wrong username or password");
+
+public class UserNameAlreadyExistsException() : BaseException("Username already exists");
