@@ -17,6 +17,6 @@ public partial class GroupsView : ContentView, INotifyPropertyChanged
     private async void GroupsListView_OnItemSelected(object? sender, SelectedItemChangedEventArgs e)
     {
         if (e.SelectedItem is Group group)
-            await Navigation.PushAsync(new GroupsPage(group.Id));
+            await Navigation.PushAsync(new PaymentsPage(group));
     }
 }

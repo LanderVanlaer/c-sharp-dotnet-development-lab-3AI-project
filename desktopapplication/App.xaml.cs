@@ -17,6 +17,8 @@ public partial class App : Application
     {
         Window window = base.CreateWindow(activationState);
 
+        window.Title = String.Empty;
+
         window.Width = Constants.App.Window.Width;
         window.Height = Constants.App.Window.Height;
 

@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="using:desktopapplication.ViewModels"
+             xmlns:models="using:desktopapplication.Models"
+             xmlns:converters="using:desktopapplication.Converters"
+             x:Class="desktopapplication.Views.PaymentsPage" x:DataType="viewModels:PaymentsViewModel"
+             Title="{Binding Path=Title}">
+    <ContentPage.Resources>
+        <converters:NewLineRemoveConverter x:Key="NewLineRemoveConverter" />
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <VerticalStackLayout>
+            <!-- TODO: Create button -->
+            <RefreshView Command="{Binding LoadPaymentsCommand}" IsRefreshing="{Binding IsBusy}">
+                <ListView x:Name="PaymentsListView" ItemsSource="{Binding Payments}"
+                          ItemSelected="PaymentsListView_OnItemSelected">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <ViewCell.View>
+                                    <Grid x:DataType="models:Payment" Margin="7,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="180" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="1*" />
+                                            <RowDefinition Height="1*" />
+                                        </Grid.RowDefinitions>
+
+                                        <Label Grid.Row="0" Grid.Column="0" Margin="0,3" Text="{Binding Path=Name}"
+                                               FontSize="16" FontAttributes="Bold" />
+
+                                        <Label Grid.Row="0" Grid.Column="1" Margin="0,3"
+                                               Text="{Binding Path=CreatedAt}"
+                                               HorizontalOptions="End" Opacity="0.5" />
+
+                                        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="auto" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <Label Grid.Column="0" Margin="0,0,0,10"
+                                                   Text="{Binding Path=Description, Converter={StaticResource NewLineRemoveConverter}}"
+                                                   LineBreakMode="TailTruncation"
+                                                   Opacity="0.7" />
+
+                                            <Label Grid.Column="1" Margin="5,0,0,10"
+                                                   Text="{Binding Path=Type}"
+                                                   HorizontalOptions="End" Opacity="0.5" />
+                                        </Grid>
+
+                                    </Grid>
+                                </ViewCell.View>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </RefreshView>
+        </VerticalStackLayout>
+    </ContentPage.Content>
+</ContentPage>

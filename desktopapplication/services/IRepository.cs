@@ -6,8 +6,13 @@ namespace desktopapplication.services;
 public interface IRepository : INotifyPropertyChanged
 {
     bool IsAuthenticated { get; }
-    ICollection<Group>? Groups();
-    Task<ICollection<Group>> FetchGroups();
+
     Task Login(string username, string password);
     Task<User> Register(string username, string password);
+
+    ICollection<Group>? Groups();
+    Task<ICollection<Group>> FetchGroups();
+
+    ICollection<Payment>? Payments();
+    Task<ICollection<Payment>> FetchPayments(Guid groupId);
 }
