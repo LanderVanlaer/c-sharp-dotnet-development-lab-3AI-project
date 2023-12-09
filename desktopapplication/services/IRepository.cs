@@ -15,4 +15,5 @@ public interface IRepository : INotifyPropertyChanged
 
     ICollection<Payment>? Payments();
     Task<ICollection<Payment>> FetchPayments(Guid groupId);
+    Task<Payment> GetPayment(Guid groupId, Guid paymentId);
 }

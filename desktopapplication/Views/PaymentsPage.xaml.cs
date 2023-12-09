@@ -10,12 +10,16 @@ public partial class PaymentsPage : ContentPage
     public PaymentsPage(Group group)
     {
         InitializeComponent();
+        Group = group;
 
         BindingContext = _viewModel = new PaymentsViewModel(group);
     }
 
-    private void PaymentsListView_OnItemSelected(object? sender, SelectedItemChangedEventArgs e)
+    private Group Group { get; }
+
+    private async void PaymentsListView_OnItemSelected(object? sender, SelectedItemChangedEventArgs e)
     {
-        throw new NotImplementedException();
+        if (e.SelectedItem is Payment payment)
+            await Navigation.PushAsync(new PaymentRecordsPage(Group, payment));
     }
 }

@@ -78,6 +78,16 @@ public class RestApiService : IRepository
         return _payments;
     }
 
+    public async Task<Payment> GetPayment(Guid groupId, Guid paymentId)
+    {
+        HttpResponseMessage response = await MakeRequest($"groups/{groupId}/payments/{paymentId}", MethodType.Get);
+
+        string content = await response.Content.ReadAsStringAsync();
+
+        return JsonConvert.DeserializeObject<Payment>(content, _serializerOptions) ??
+               throw new Exception("No payment found");
+    }
+
     /// <summary>
     ///     Logs in the user.
     /// </summary>

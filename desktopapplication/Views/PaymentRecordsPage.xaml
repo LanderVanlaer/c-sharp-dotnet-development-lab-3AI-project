@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="using:desktopapplication.ViewModels"
+             xmlns:models="clr-namespace:desktopapplication.Models"
+             x:Class="desktopapplication.Views.PaymentRecordsPage" x:DataType="viewModels:PaymentRecordsViewModel"
+             Title="{Binding Path=Title}" Padding="7,0">
+    <ContentPage.Content>
+        <VerticalStackLayout>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="130" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="300" />
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0" Text="{Binding Path=Payment.Type}" FontSize="20" Opacity=".8" />
+                <Label Grid.Column="1" Text="{Binding Path=Payment.Name}" FontSize="20" />
+
+                <VerticalStackLayout Grid.Column="2" Opacity=".6" HorizontalOptions="End">
+                    <Label Text="{Binding Path=Payment.Id}"
+                           HorizontalTextAlignment="End" />
+                    <Label Text="{Binding Path=Payment.CreatedAt}"
+                           HorizontalTextAlignment="End" />
+                </VerticalStackLayout>
+            </Grid>
+
+            <Label Text="{Binding Path=Payment.Description}" Margin="0,6" />
+
+            <BoxView HeightRequest="1" Color="White" Margin="50,20" Opacity=".5" />
+
+            <RefreshView Command="{Binding LoadPaymentRecordsCommand}" IsRefreshing="{Binding IsBusy}">
+                <ListView ItemsSource="{Binding Path=Payment.PaymentRecords}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid x:DataType="models:PaymentRecord">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Grid.Column="0" Text="{Binding Path=Amount}" FontSize="16" Margin="0,0,0,5" />
+                                    <!-- TODO: name of user -->
+                                    <Label Grid.Column="1" Text="{Binding Path=UserId}" HorizontalOptions="End"
+                                           FontSize="16"
+                                           Margin="0,0,0,5" />
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </RefreshView>
+        </VerticalStackLayout>
+    </ContentPage.Content>
+</ContentPage>
