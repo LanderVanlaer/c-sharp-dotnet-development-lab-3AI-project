@@ -17,7 +17,9 @@ public class RestApiService : IRepository
     #region Getters
 
     public ICollection<Group>? Groups() => _groups;
+
     public ICollection<Payment>? Payments() => _payments;
+    public ICollection<User>? Users() => _users;
 
     #endregion
 
@@ -49,6 +51,7 @@ public class RestApiService : IRepository
 
     private List<Group>? _groups;
     private List<Payment>? _payments;
+    private List<User>? _users;
 
     #endregion
 
@@ -65,6 +68,17 @@ public class RestApiService : IRepository
                   throw new Exception("No groups found");
 
         return _groups;
+    }
+
+    public async Task<ICollection<User>> FetchUsers(Guid groupId)
+    {
+        HttpResponseMessage response = await MakeRequest($"groups/{groupId}/users", MethodType.Get);
+
+        string content = await response.Content.ReadAsStringAsync();
+        _users = JsonConvert.DeserializeObject<List<User>>(content, _serializerOptions) ??
+                 throw new Exception("No Users found");
+
+        return _users;
     }
 
     public async Task<ICollection<Payment>> FetchPayments(Guid groupId)

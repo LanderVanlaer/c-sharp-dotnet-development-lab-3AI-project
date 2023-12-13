@@ -6,4 +6,5 @@ public class User
     public Guid Id;
 
     public string Username;
+    public ICollection<Group> UserGroups;
 }

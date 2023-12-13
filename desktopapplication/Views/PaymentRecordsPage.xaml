@@ -4,8 +4,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModels="using:desktopapplication.ViewModels"
              xmlns:models="clr-namespace:desktopapplication.Models"
+             xmlns:converters="clr-namespace:desktopapplication.Converters"
              x:Class="desktopapplication.Views.PaymentRecordsPage" x:DataType="viewModels:PaymentRecordsViewModel"
              Title="{Binding Path=Title}" Padding="7,0">
+    <ContentPage.Resources>
+        <converters:IdToUserNameConverter x:Key="IdToUserNameConverter" />
+    </ContentPage.Resources>
     <ContentPage.Content>
         <VerticalStackLayout>
             <Grid>
@@ -42,8 +46,9 @@
                                     </Grid.ColumnDefinitions>
 
                                     <Label Grid.Column="0" Text="{Binding Path=Amount}" FontSize="16" Margin="0,0,0,5" />
-                                    <!-- TODO: name of user -->
-                                    <Label Grid.Column="1" Text="{Binding Path=UserId}" HorizontalOptions="End"
+                                    <Label Grid.Column="1"
+                                           Text="{Binding Path=UserId, Converter={StaticResource IdToUserNameConverter}}"
+                                           HorizontalOptions="End"
                                            FontSize="16"
                                            Margin="0,0,0,5" />
                                 </Grid>
