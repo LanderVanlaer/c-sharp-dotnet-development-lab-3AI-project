@@ -18,15 +18,7 @@ public partial class AppShell : Shell
 
             OnPropertyChanged(nameof(IsAuthenticated));
             OnPropertyChanged(nameof(IsNotAuthenticated));
-
-
-            // Not doing the following check will cause all the waiting tasks to be removed from the queue
-            FlyoutItem newItem = IsAuthenticated ? HomeFlyoutItem : LoginFlyoutItem;
-            if (CurrentItem == newItem) return;
-            CurrentItem = newItem;
         };
-
-        CurrentItem = IsAuthenticated ? HomeFlyoutItem : LoginFlyoutItem;
 
         BindingContext = this;
     }

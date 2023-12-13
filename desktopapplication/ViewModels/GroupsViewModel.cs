@@ -12,7 +12,7 @@ public class GroupsViewModel : BaseViewModel
 
     public Command LoadGroupsCommand { get; }
 
-    public IEnumerable<Group> Groups => Repository.Groups() ?? Enumerable.Empty<Group>();
+    public IEnumerable<Group> Groups => Repository.Groups ?? Enumerable.Empty<Group>();
 
     private void LoadGroups() => Task.Run(async () =>
     {

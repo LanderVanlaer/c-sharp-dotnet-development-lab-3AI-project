@@ -10,13 +10,19 @@ public interface IRepository : INotifyPropertyChanged
     Task Login(string username, string password);
     Task<User> Register(string username, string password);
 
-    ICollection<Group>? Groups();
+
+    ICollection<Group>? Groups { get; }
     Task<ICollection<Group>> FetchGroups();
 
-    ICollection<User>? Users();
+
+    User? User { get; }
+    Task<User> FetchUser();
+
+    ICollection<User>? Users { get; }
     Task<ICollection<User>> FetchUsers(Guid groupId);
 
-    ICollection<Payment>? Payments();
+
+    ICollection<Payment>? Payments { get; }
     Task<ICollection<Payment>> FetchPayments(Guid groupId);
     Task<Payment> GetPayment(Guid groupId, Guid paymentId);
 }

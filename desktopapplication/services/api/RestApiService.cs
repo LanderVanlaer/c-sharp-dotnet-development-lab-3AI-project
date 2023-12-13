@@ -16,10 +16,29 @@ public class RestApiService : IRepository
 {
     #region Getters
 
-    public ICollection<Group>? Groups() => _groups;
+    public ICollection<Group>? Groups
+    {
+        get => _groups;
+        set => SetField(ref _groups, value);
+    }
 
-    public ICollection<Payment>? Payments() => _payments;
-    public ICollection<User>? Users() => _users;
+    public ICollection<Payment>? Payments
+    {
+        get => _payments;
+        set => SetField(ref _payments, value);
+    }
+
+    public ICollection<User>? Users
+    {
+        get => _users;
+        set => SetField(ref _users, value);
+    }
+
+    public User? User
+    {
+        get => _user;
+        set => SetField(ref _user, value);
+    }
 
     #endregion
 
@@ -49,9 +68,10 @@ public class RestApiService : IRepository
 
     #region Data
 
-    private List<Group>? _groups;
-    private List<Payment>? _payments;
-    private List<User>? _users;
+    private User? _user;
+    private ICollection<Group>? _groups;
+    private ICollection<Payment>? _payments;
+    private ICollection<User>? _users;
 
     #endregion
 
@@ -64,10 +84,21 @@ public class RestApiService : IRepository
         HttpResponseMessage response = await MakeRequest("groups", MethodType.Get);
 
         string content = await response.Content.ReadAsStringAsync();
-        _groups = JsonConvert.DeserializeObject<List<Group>>(content, _serializerOptions) ??
-                  throw new Exception("No groups found");
+        Groups = JsonConvert.DeserializeObject<List<Group>>(content, _serializerOptions) ??
+                 throw new Exception("No groups found");
 
-        return _groups;
+        return Groups;
+    }
+
+    public async Task<User> FetchUser()
+    {
+        HttpResponseMessage response = await MakeRequest("users/me", MethodType.Get);
+
+        string content = await response.Content.ReadAsStringAsync();
+        User = JsonConvert.DeserializeObject<User>(content, _serializerOptions) ??
+               throw new Exception("No User found");
+
+        return User;
     }
 
     public async Task<ICollection<User>> FetchUsers(Guid groupId)
@@ -75,10 +106,10 @@ public class RestApiService : IRepository
         HttpResponseMessage response = await MakeRequest($"groups/{groupId}/users", MethodType.Get);
 
         string content = await response.Content.ReadAsStringAsync();
-        _users = JsonConvert.DeserializeObject<List<User>>(content, _serializerOptions) ??
-                 throw new Exception("No Users found");
+        Users = JsonConvert.DeserializeObject<List<User>>(content, _serializerOptions) ??
+                throw new Exception("No Users found");
 
-        return _users;
+        return Users;
     }
 
     public async Task<ICollection<Payment>> FetchPayments(Guid groupId)
@@ -86,10 +117,10 @@ public class RestApiService : IRepository
         HttpResponseMessage response = await MakeRequest($"groups/{groupId}/payments", MethodType.Get);
 
         string content = await response.Content.ReadAsStringAsync();
-        _payments = JsonConvert.DeserializeObject<List<Payment>>(content, _serializerOptions) ??
-                    throw new Exception("No payments found");
+        Payments = JsonConvert.DeserializeObject<List<Payment>>(content, _serializerOptions) ??
+                   throw new Exception("No payments found");
 
-        return _payments;
+        return Payments;
     }
 
     public async Task<Payment> GetPayment(Guid groupId, Guid paymentId)

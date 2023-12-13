@@ -8,15 +8,23 @@
     xmlns:views="clr-namespace:desktopapplication.Views"
     Shell.FlyoutBehavior="Flyout"
     Title="desktopapplication" x:DataType="local:AppShell">
-    <FlyoutItem x:Name="HomeFlyoutItem" Title="Home" IsVisible="{Binding IsAuthenticated}">
-        <ShellContent ContentTemplate="{DataTemplate local:MainPage}" />
+    <FlyoutItem
+        x:Name="HomeFlyoutItem"
+        Title="Home"
+        IsVisible="{Binding IsAuthenticated}">
+        <ShellContent Route="Home" ContentTemplate="{DataTemplate local:MainPage}" />
     </FlyoutItem>
-    <FlyoutItem x:Name="ProfileFlyoutItem" Title="Profile" IsVisible="{Binding IsAuthenticated}">
-        <!--TODO: ProfilePage-->
-        <ShellContent ContentTemplate="{DataTemplate local:MainPage}" />
+    <FlyoutItem
+        x:Name="ProfileFlyoutItem"
+        Title="Profile"
+        IsVisible="{Binding IsAuthenticated}">
+        <ShellContent Route="Profile" ContentTemplate="{DataTemplate views:ProfilePage}" />
     </FlyoutItem>
-    <FlyoutItem x:Name="LoginFlyoutItem" Title="Login" IsVisible="{Binding IsNotAuthenticated}">
-        <ShellContent Title="Login" ContentTemplate="{DataTemplate views:LoginPage}" />
-        <ShellContent Title="Registration" ContentTemplate="{DataTemplate views:RegisterPage}" />
+    <FlyoutItem FlyoutDisplayOptions="AsMultipleItems"
+                x:Name="LoginFlyoutItem"
+                Title="Login"
+                IsVisible="{Binding IsNotAuthenticated}">
+        <ShellContent Title="Login" Route="Login" ContentTemplate="{DataTemplate views:LoginPage}" />
+        <ShellContent Title="Registration" Route="Registration" ContentTemplate="{DataTemplate views:RegisterPage}" />
     </FlyoutItem>
 </Shell>

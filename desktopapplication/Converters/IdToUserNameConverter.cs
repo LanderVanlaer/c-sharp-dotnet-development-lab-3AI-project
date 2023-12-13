@@ -11,7 +11,7 @@ public class IdToUserNameConverter : IValueConverter
 
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        ICollection<User>? users = _repository.Users();
+        ICollection<User>? users = _repository.Users;
 
         if (users == null)
         {
@@ -34,7 +34,7 @@ public class IdToUserNameConverter : IValueConverter
         if (value is Guid)
             return value;
 
-        ICollection<User>? users = _repository.Users();
+        ICollection<User>? users = _repository.Users;
 
         if (users == null)
         {
