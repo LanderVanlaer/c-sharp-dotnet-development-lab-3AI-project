@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:desktopapplication.Converters"
+             xmlns:windowsSpecific="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.WindowsSpecific;assembly=Microsoft.Maui.Controls"
+             xmlns:viewModels="clr-namespace:desktopapplication.ViewModels"
+             x:Class="desktopapplication.Views.ProfileEditPage" x:DataType="viewModels:ProfileEditPageViewModel">
+
+    <ContentPage.Resources>
+        <converters:InvertBooleanConverter x:Key="InvertBooleanConverter" />
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <VerticalStackLayout>
+            <RefreshView Command="{Binding LoadUserCommand}" IsRefreshing="{Binding IsBusy}"
+                         windowsSpecific:RefreshView.RefreshPullDirection="TopToBottom">
+                <ScrollView>
+                    <Grid Margin="20" RowSpacing="10" ColumnSpacing="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Row="0" Grid.Column="0" Text="Created At:" FontSize="18" HorizontalOptions="End"
+                               FontAttributes="Bold" />
+                        <Label Grid.Row="0" Grid.Column="1" Text="{Binding CreatedAt}" FontSize="18" />
+
+                        <Label Grid.Row="1" Grid.Column="0" Text="Id:" FontSize="18" HorizontalOptions="End"
+                               FontAttributes="Bold" />
+                        <Label Grid.Row="1" Grid.Column="1" Text="{Binding Id}" FontSize="18" />
+
+                        <Label Grid.Row="2" Grid.Column="0" Text="Username:" FontSize="18" HorizontalOptions="End"
+                               FontAttributes="Bold" />
+                        <Entry Grid.Row="2" Grid.Column="1" Text="{Binding Username}" FontSize="18" />
+
+                        <Label Grid.Row="3" Grid.Column="0" Text="Password:" FontSize="18" HorizontalOptions="End"
+                               FontAttributes="Bold" />
+                        <Entry Grid.Row="3" Grid.Column="1" Text="{Binding Password}" IsPassword="True" FontSize="18" />
+
+                        <Label Grid.Row="4" Grid.Column="0" Text="Password Confirm:" FontSize="18"
+                               HorizontalOptions="End"
+                               FontAttributes="Bold" />
+                        <Entry Grid.Row="4" Grid.Column="1" Text="{Binding PasswordConfirm}" IsPassword="True"
+                               FontSize="18" />
+                    </Grid>
+                </ScrollView>
+            </RefreshView>
+
+            <Label Margin="0,5, 0, 10" Text="{Binding Message}"
+                   IsVisible="{Binding Path=HasMessage}" TextColor="OrangeRed" FontAttributes="Bold" />
+            <Label Margin="0,5, 0, 10" Text="{Binding OkMessage}"
+                   IsVisible="{Binding Path=HasOkMessage}" TextColor="Green" FontAttributes="Bold" />
+
+            <Button Text="Update" Command="{Binding UpdateUserCommand}"
+                    IsEnabled="{Binding Path=IsBusy, Converter={StaticResource InvertBooleanConverter}}" />
+        </VerticalStackLayout>
+    </ContentPage.Content>
+</ContentPage>

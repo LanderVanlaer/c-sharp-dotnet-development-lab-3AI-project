@@ -20,6 +20,7 @@ public interface IRepository : INotifyPropertyChanged
 
     ICollection<User>? Users { get; }
     Task<ICollection<User>> FetchUsers(Guid groupId);
+    Task<User> UpdateUser(string? username, string? password);
 
 
     ICollection<Payment>? Payments { get; }

@@ -112,6 +112,39 @@ public class RestApiService : IRepository
         return Users;
     }
 
+    public async Task<User> UpdateUser(string? username, string? password)
+    {
+        if (username == null && password == null)
+            throw new InvalidArgumentsException("No username or password given");
+
+        string body = JsonConvert.SerializeObject(new
+        {
+            username,
+            password,
+        });
+
+        string content;
+        try
+        {
+            content = await (await MakeRequest("users/me", MethodType.Patch, body)).Content.ReadAsStringAsync();
+        }
+        catch (ApiError e)
+        {
+            if (e.Status == HttpStatusCode.Conflict)
+                throw new UserNameAlreadyExistsException();
+
+            throw;
+        }
+
+        User = JsonConvert.DeserializeObject<User>(content, _serializerOptions) ??
+               throw new Exception("No user found");
+
+        Debug.WriteLine("User updated");
+
+        return User;
+    }
+
+
     public async Task<ICollection<Payment>> FetchPayments(Guid groupId)
     {
         HttpResponseMessage response = await MakeRequest($"groups/{groupId}/payments", MethodType.Get);
@@ -336,3 +369,5 @@ public class ApiError(MethodType method, string path, HttpStatusCode status, Api
 public class WrongLoginCredentialsException() : BaseException("Wrong username or password");
 
 public class UserNameAlreadyExistsException() : BaseException("Username already exists");
+
+public class InvalidArgumentsException(string message) : BaseException(message);

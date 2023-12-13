@@ -16,9 +16,11 @@
     </FlyoutItem>
     <FlyoutItem
         x:Name="ProfileFlyoutItem"
+        FlyoutDisplayOptions="AsSingleItem"
         Title="Profile"
         IsVisible="{Binding IsAuthenticated}">
-        <ShellContent Route="Profile" ContentTemplate="{DataTemplate views:ProfilePage}" />
+        <ShellContent Title="Profile" Route="Profile" ContentTemplate="{DataTemplate views:ProfilePage}" />
+        <ShellContent Title="Edit" Route="Edit" ContentTemplate="{DataTemplate views:ProfileEditPage}" />
     </FlyoutItem>
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems"
                 x:Name="LoginFlyoutItem"
