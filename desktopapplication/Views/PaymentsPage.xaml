@@ -9,6 +9,7 @@
              Title="{Binding Path=Title}">
     <ContentPage.Resources>
         <converters:NewLineRemoveConverter x:Key="NewLineRemoveConverter" />
+        <converters:InvertBooleanConverter x:Key="InvertBooleanConverter" />
     </ContentPage.Resources>
     <ContentPage.Content>
         <VerticalStackLayout>
@@ -60,6 +61,9 @@
                     </ListView.ItemTemplate>
                 </ListView>
             </RefreshView>
+
+            <Button Text="Refresh" Command="{Binding LoadPaymentsCommand}"
+                    IsEnabled="{Binding Path=IsBusy, Converter={StaticResource InvertBooleanConverter}}" />
         </VerticalStackLayout>
     </ContentPage.Content>
 </ContentPage>

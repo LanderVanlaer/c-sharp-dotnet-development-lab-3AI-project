@@ -4,9 +4,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModels="clr-namespace:desktopapplication.ViewModels"
              xmlns:models="clr-namespace:desktopapplication.Models"
+             xmlns:converters="clr-namespace:desktopapplication.Converters"
              x:Class="desktopapplication.Views.GroupsView" x:DataType="viewModels:GroupsViewModel">
+    <ContentView.Resources>
+        <converters:InvertBooleanConverter x:Key="InvertBooleanConverter" />
+    </ContentView.Resources>
     <ContentView.Content>
-        <StackLayout>
+        <VerticalStackLayout>
             <RefreshView Command="{Binding LoadGroupsCommand}" IsRefreshing="{Binding IsBusy}">
                 <ListView x:Name="GroupsListView" ItemsSource="{Binding Groups}"
                           ItemSelected="GroupsListView_OnItemSelected">
@@ -29,6 +33,9 @@
                     </ListView.ItemTemplate>
                 </ListView>
             </RefreshView>
-        </StackLayout>
+
+            <Button Text="Refresh" Command="{Binding LoadGroupsCommand}"
+                    IsEnabled="{Binding Path=IsBusy, Converter={StaticResource InvertBooleanConverter}}" />
+        </VerticalStackLayout>
     </ContentView.Content>
 </ContentView>

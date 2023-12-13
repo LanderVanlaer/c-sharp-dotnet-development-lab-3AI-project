@@ -9,6 +9,7 @@
              Title="{Binding Path=Title}" Padding="7,0">
     <ContentPage.Resources>
         <converters:IdToUserNameConverter x:Key="IdToUserNameConverter" />
+        <converters:InvertBooleanConverter x:Key="InvertBooleanConverter" />
     </ContentPage.Resources>
     <ContentPage.Content>
         <VerticalStackLayout>
@@ -57,6 +58,9 @@
                     </ListView.ItemTemplate>
                 </ListView>
             </RefreshView>
+
+            <Button Text="Refresh" Command="{Binding LoadPaymentRecordsCommand}"
+                    IsEnabled="{Binding Path=IsBusy, Converter={StaticResource InvertBooleanConverter}}" />
         </VerticalStackLayout>
     </ContentPage.Content>
 </ContentPage>
