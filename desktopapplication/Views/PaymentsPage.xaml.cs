@@ -22,4 +22,9 @@ public partial class PaymentsPage : ContentPage
         if (e.SelectedItem is Payment payment)
             await Navigation.PushAsync(new PaymentRecordsPage(Group, payment));
     }
+
+    private async void AddUser_OnClicked(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new AddUserToGroupPage(Group));
+    }
 }

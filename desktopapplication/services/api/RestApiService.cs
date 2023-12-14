@@ -90,6 +90,21 @@ public class RestApiService : IRepository
         return Groups;
     }
 
+    public async Task AddUserToGroup(Guid groupId, string username)
+    {
+        try
+        {
+            await MakeRequest($"/groups/{groupId}/users/{username}", MethodType.Post);
+        }
+        catch (ApiError e)
+        {
+            if (e.Status == HttpStatusCode.NotFound)
+                throw new UserNotFoundException();
+
+            throw;
+        }
+    }
+
     public async Task<User> FetchUser()
     {
         HttpResponseMessage response = await MakeRequest("users/me", MethodType.Get);
@@ -277,7 +292,7 @@ public class RestApiService : IRepository
         _client.DefaultRequestHeaders.Remove("Authorization");
         _client.DefaultRequestHeaders.Add("Authorization", "Bearer " + JsonWebToken);
 
-        Uri uri = new(Constants.RestApi.BaseUrl + path);
+        Uri uri = new(Constants.RestApi.BaseUrl + (path.StartsWith('/') ? path[1..] : path));
 
         HttpResponseMessage response = method switch
         {
@@ -371,3 +386,5 @@ public class WrongLoginCredentialsException() : BaseException("Wrong username or
 public class UserNameAlreadyExistsException() : BaseException("Username already exists");
 
 public class InvalidArgumentsException(string message) : BaseException(message);
+
+public class UserNotFoundException() : BaseException("No user found with the given username.");

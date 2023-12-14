@@ -5,10 +5,6 @@ namespace desktopapplication.ViewModels;
 
 public class ProfilePageViewModel : BaseViewModel
 {
-    public DateTime CreatedAt => User.CreatedAt;
-    public Guid Id => User.Id;
-    public string Username => User.Username;
-
     public ProfilePageViewModel()
     {
         LoadUserCommand = new Command(LoadUser);
@@ -24,6 +20,10 @@ public class ProfilePageViewModel : BaseViewModel
             OnPropertyChanged(nameof(Username));
         };
     }
+
+    public DateTime CreatedAt => User.CreatedAt;
+    public Guid Id => User.Id;
+    public string Username => User.Username;
 
     public Command LoadUserCommand { get; }
 

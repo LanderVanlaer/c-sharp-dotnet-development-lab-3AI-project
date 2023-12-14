@@ -14,6 +14,9 @@
     <ContentPage.Content>
         <VerticalStackLayout>
             <!-- TODO: Create button -->
+            <HorizontalStackLayout>
+                <Button Text="Add User" Clicked="AddUser_OnClicked" />
+            </HorizontalStackLayout>
             <RefreshView Command="{Binding LoadPaymentsCommand}" IsRefreshing="{Binding IsBusy}">
                 <ListView x:Name="PaymentsListView" ItemsSource="{Binding Payments}"
                           ItemSelected="PaymentsListView_OnItemSelected">

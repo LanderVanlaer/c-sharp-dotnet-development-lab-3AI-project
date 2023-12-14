@@ -7,23 +7,22 @@ public interface IRepository : INotifyPropertyChanged
 {
     bool IsAuthenticated { get; }
 
+
+    ICollection<Group>? Groups { get; }
+    User? User { get; }
+    ICollection<User>? Users { get; }
+    ICollection<Payment>? Payments { get; }
+
     Task Login(string username, string password);
     Task<User> Register(string username, string password);
 
-
-    ICollection<Group>? Groups { get; }
     Task<ICollection<Group>> FetchGroups();
+    Task AddUserToGroup(Guid groupId, string username);
 
-
-    User? User { get; }
     Task<User> FetchUser();
-
-    ICollection<User>? Users { get; }
     Task<ICollection<User>> FetchUsers(Guid groupId);
     Task<User> UpdateUser(string? username, string? password);
 
-
-    ICollection<Payment>? Payments { get; }
     Task<ICollection<Payment>> FetchPayments(Guid groupId);
     Task<Payment> GetPayment(Guid groupId, Guid paymentId);
 }

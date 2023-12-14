@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:desktopapplication.ViewModels"
+             x:Class="desktopapplication.Views.AddUserToGroupPage" Title="{Binding Path=Title}"
+             x:DataType="viewModels:AddUserToGroupPageViewModel">
+    <ContentPage.Content>
+        <VerticalStackLayout>
+            <Label Text="Username:" />
+            <Entry Text="{Binding Path=Username}" />
+            <Button Text="Add User To Group" Command="{Binding Path=AddUserToGroupCommand}" />
+        </VerticalStackLayout>
+    </ContentPage.Content>
+</ContentPage>

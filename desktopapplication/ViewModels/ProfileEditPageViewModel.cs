@@ -6,6 +6,62 @@ namespace desktopapplication.ViewModels;
 
 public class ProfileEditPageViewModel : BaseViewModel
 {
+    public ProfileEditPageViewModel()
+    {
+        LoadUserCommand = new Command(LoadUser);
+        UpdateUserCommand = new Command(UpdateUser);
+        LoadUser();
+
+        Repository.PropertyChanged += (_, args) =>
+        {
+            if (args.PropertyName != null && args.PropertyName != nameof(IRepository.User)) return;
+            OnPropertyChanged(nameof(User));
+
+            OnPropertyChanged(nameof(CreatedAt));
+            OnPropertyChanged(nameof(Id));
+
+            if (Username == String.Empty)
+                Username = User.Username;
+        };
+    }
+
+    public Command LoadUserCommand { get; }
+    public Command UpdateUserCommand { get; }
+
+    public User User => Repository.User ?? new User();
+
+    private void LoadUser() => Task.Run(async () =>
+    {
+        await LoadOnTask(Repository.FetchUser());
+        OnPropertyChanged(nameof(User));
+    });
+
+    private void UpdateUser() => Task.Run(async () =>
+    {
+        Message = OkMessage = null;
+
+        if (Password != PasswordConfirm)
+        {
+            Message = "Passwords do not match";
+            return;
+        }
+
+        try
+        {
+            await LoadOnTask(Repository.UpdateUser(Username, Password == String.Empty ? null : Password));
+
+            OkMessage = "Successfully registered";
+        }
+        catch (UserNameAlreadyExistsException e)
+        {
+            Message = e.Message;
+        }
+        catch (ApiError e)
+        {
+            Message = e.Body?.Errors != null && e.Body.Errors.Count != 0 ? string.Join("\n", e.Body.Errors) : e.Message;
+        }
+    });
+
     #region Private Fields
 
     private string _username = string.Empty;
@@ -65,60 +121,4 @@ public class ProfileEditPageViewModel : BaseViewModel
     public bool HasOkMessage => OkMessage != null;
 
     #endregion
-
-    public ProfileEditPageViewModel()
-    {
-        LoadUserCommand = new Command(LoadUser);
-        UpdateUserCommand = new Command(UpdateUser);
-        LoadUser();
-
-        Repository.PropertyChanged += (_, args) =>
-        {
-            if (args.PropertyName != null && args.PropertyName != nameof(IRepository.User)) return;
-            OnPropertyChanged(nameof(User));
-
-            OnPropertyChanged(nameof(CreatedAt));
-            OnPropertyChanged(nameof(Id));
-
-            if (Username == String.Empty)
-                Username = User.Username;
-        };
-    }
-
-    public Command LoadUserCommand { get; }
-    public Command UpdateUserCommand { get; }
-
-    public User User => Repository.User ?? new User();
-
-    private void LoadUser() => Task.Run(async () =>
-    {
-        await LoadOnTask(Repository.FetchUser());
-        OnPropertyChanged(nameof(User));
-    });
-
-    private void UpdateUser() => Task.Run(async () =>
-    {
-        Message = OkMessage = null;
-
-        if (Password != PasswordConfirm)
-        {
-            Message = "Passwords do not match";
-            return;
-        }
-
-        try
-        {
-            await LoadOnTask(Repository.UpdateUser(Username, Password == String.Empty ? null : Password));
-
-            OkMessage = "Successfully registered";
-        }
-        catch (UserNameAlreadyExistsException e)
-        {
-            Message = e.Message;
-        }
-        catch (ApiError e)
-        {
-            Message = e.Body?.Errors != null && e.Body.Errors.Count != 0 ? string.Join("\n", e.Body.Errors) : e.Message;
-        }
-    });
 }
