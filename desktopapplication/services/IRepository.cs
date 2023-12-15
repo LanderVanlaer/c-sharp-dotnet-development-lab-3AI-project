@@ -25,4 +25,12 @@ public interface IRepository : INotifyPropertyChanged
 
     Task<ICollection<Payment>> FetchPayments(Guid groupId);
     Task<Payment> GetPayment(Guid groupId, Guid paymentId);
+
+    Task<Payment> AddPayment(Guid groupId,
+        Payment.PaymentType type,
+        string name,
+        string description,
+        IEnumerable<PaymentEntry> paymentEntries);
 }
+
+public record PaymentEntry(Guid UserId, decimal Amount);

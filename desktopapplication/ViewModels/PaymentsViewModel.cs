@@ -9,6 +9,11 @@ public class PaymentsViewModel : BaseViewModel
         Group = group;
         LoadPaymentsCommand = new Command(LoadPayments);
         LoadPayments();
+
+        Repository.PropertyChanged += (_, args) =>
+        {
+            if (args.PropertyName == nameof(Repository.Payments)) OnPropertyChanged(nameof(Payments));
+        };
     }
 
     public Group Group { get; }

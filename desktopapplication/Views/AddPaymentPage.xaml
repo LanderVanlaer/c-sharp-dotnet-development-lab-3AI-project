@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:desktopapplication.ViewModels"
+             x:Class="desktopapplication.Views.AddPaymentPage" x:DataType="viewModels:AddPaymentPageViewModel"
+             Title="{Binding Path=Title}" Padding="10">
+    <ContentPage.Content>
+        <ScrollView>
+            <VerticalStackLayout>
+                <Grid Margin="10" ColumnSpacing="20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Column="0" Text="Name" VerticalOptions="Center" />
+                    <Entry
+                        Grid.Column="1"
+                        Text="{Binding Path=Name}"
+                        Height="16"
+                        VerticalOptions="Center"
+                        HorizontalOptions="FillAndExpand" />
+
+                    <Picker Grid.Column="2" Title="Payment Type" HorizontalOptions="End"
+                            SelectedIndex="{Binding Path=PaymentTypeIndex}">
+                        <Picker.Items>
+                            <x:String>Purchase</x:String>
+                            <x:String>Repayment</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </Grid>
+
+                <Editor Placeholder="Description" HeightRequest="150" Text="{Binding Path=Description}" />
+
+                <HorizontalStackLayout>
+                    <Label Text="Who payed? (+)" Margin="0, 15" FontSize="18" />
+                    <HorizontalStackLayout Opacity=".8" Margin="10,0" VerticalOptions="Center">
+                        <Label Text="Total:" FontSize="18" Margin="0,0,4,0" />
+                        <Label Text="{Binding Path=SumOfPaymentEntriesPayed}" FontSize="18" />
+                    </HorizontalStackLayout>
+                </HorizontalStackLayout>
+                <ListView ItemsSource="{Binding Path=PaymentEntriesPayed}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid x:DataType="viewModels:PaymentEntry" ColumnSpacing="10" RowSpacing="8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Grid.Column="0" Text="{Binding Path=Username}" Margin="8,0,0,0"
+                                           VerticalTextAlignment="Center" />
+                                    <Entry Grid.Column="1" Text="{Binding Path=AmountAsString}" Keyboard="Numeric" />
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <BoxView HeightRequest="1" Color="White" Margin="50,30,50,20" Opacity=".5" />
+
+                <HorizontalStackLayout Margin="0, 15, 0, 25">
+                    <Label Text="Who has to pay? (-)" FontSize="18" VerticalTextAlignment="Center" />
+                    <HorizontalStackLayout Opacity=".8" Margin="10,0" VerticalOptions="Center">
+                        <Label Text="Total:" FontSize="18" Margin="0,0,4,0" />
+                        <Label Text="{Binding Path=SumOfPaymentEntriesHasToPay}" FontSize="18" />
+                    </HorizontalStackLayout>
+                    <Button Text="Reset" Command="{Binding Path=ResetPaymentEntriesHasToPayCommand}" Margin="30,0,0,0" />
+                </HorizontalStackLayout>
+
+                <ListView ItemsSource="{Binding Path=PaymentEntriesHasToPay}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid x:DataType="viewModels:PaymentEntry" ColumnSpacing="10" RowSpacing="8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Grid.Column="0" Text="{Binding Path=Username}" Margin="8,0,0,0"
+                                           VerticalTextAlignment="Center" />
+                                    <Entry Grid.Column="1" Text="{Binding Path=AmountAsString}" Keyboard="Numeric" />
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <Button Text="Save" Command="{Binding Path=SaveCommand}" Margin="0, 30, 0, 0"
+                        IsEnabled="{Binding Path=CanSave}" />
+            </VerticalStackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

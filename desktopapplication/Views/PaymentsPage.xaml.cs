@@ -23,8 +23,9 @@ public partial class PaymentsPage : ContentPage
             await Navigation.PushAsync(new PaymentRecordsPage(Group, payment));
     }
 
-    private async void AddUser_OnClicked(object sender, EventArgs e)
-    {
+    private async void AddUser_OnClicked(object sender, EventArgs e) =>
         await Navigation.PushAsync(new AddUserToGroupPage(Group));
-    }
+
+    private async void AddPayment_OnClicked(object sender, EventArgs e) =>
+        await Navigation.PushAsync(new AddPaymentPage(Group));
 }
