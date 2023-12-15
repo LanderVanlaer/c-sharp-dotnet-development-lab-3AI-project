@@ -23,7 +23,7 @@ public class ValidGroupPaymentAttribute : ValidationAttribute
         if (dto.PaymentRecords.Select(paymentRecordWriteDto => paymentRecordWriteDto.Amount).Sum() > 0.01m)
             return new ValidationResult(nameof(Payment.PaymentRecords) + " amounts must sum to 0");
 
-        if (dto.PaymentRecords.Select(paymentRecordWriteDto => paymentRecordWriteDto.Amount == 0).Any())
+        if (dto.PaymentRecords.Any(paymentRecordWriteDto => paymentRecordWriteDto.Amount == 0))
             return new ValidationResult(nameof(Payment.PaymentRecords) + " cannot contain users with an amount of 0");
 
         return ValidationResult.Success;
