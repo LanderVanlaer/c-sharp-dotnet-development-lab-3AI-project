@@ -59,7 +59,7 @@ public class GroupPaymentsController : ControllerBase
     [HttpPost("")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<PaymentReadDto> CreateGroupPayment(Guid groupId, PaymentWriteDto dto)
+    public async Task<ActionResult<PaymentReadDto>> CreateGroupPayment(Guid groupId, PaymentWriteDto dto)
     {
         Group? group = _repository.GetGroupWithUsersGroups(groupId);
         if (group == null) return ApiResponse.NotFound;
@@ -88,7 +88,7 @@ public class GroupPaymentsController : ControllerBase
         };
 
         _repository.AddPayment(payment);
-        _repository.SaveChanges();
+        await _repository.SaveChanges();
 
         return CreatedAtRoute(nameof(GetPayment), new { paymentId = payment.Id, groupId },
             _mapper.Map<PaymentReadDto>(payment));
