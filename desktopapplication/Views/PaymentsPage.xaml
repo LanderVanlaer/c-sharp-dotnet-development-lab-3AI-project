@@ -12,61 +12,63 @@
         <converters:InvertBooleanConverter x:Key="InvertBooleanConverter" />
     </ContentPage.Resources>
     <ContentPage.Content>
-        <VerticalStackLayout>
-            <HorizontalStackLayout Spacing="16">
-                <Button Text="Add User" Clicked="AddUser_OnClicked" />
-                <Button Text="Add Payment" Clicked="AddPayment_OnClicked" />
-            </HorizontalStackLayout>
-            <RefreshView Command="{Binding LoadPaymentsCommand}" IsRefreshing="{Binding IsBusy}">
-                <ListView x:Name="PaymentsListView" ItemsSource="{Binding Payments}"
-                          ItemSelected="PaymentsListView_OnItemSelected">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <ViewCell.View>
-                                    <Grid x:DataType="models:Payment" Margin="7,0">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="180" />
-                                        </Grid.ColumnDefinitions>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="1*" />
-                                            <RowDefinition Height="1*" />
-                                        </Grid.RowDefinitions>
-
-                                        <Label Grid.Row="0" Grid.Column="0" Margin="0,3" Text="{Binding Path=Name}"
-                                               FontSize="16" FontAttributes="Bold" />
-
-                                        <Label Grid.Row="0" Grid.Column="1" Margin="0,3"
-                                               Text="{Binding Path=CreatedAt}"
-                                               HorizontalOptions="End" Opacity="0.5" />
-
-                                        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+        <ScrollView>
+            <VerticalStackLayout>
+                <HorizontalStackLayout Spacing="16">
+                    <Button Text="Add User" Clicked="AddUser_OnClicked" />
+                    <Button Text="Add Payment" Clicked="AddPayment_OnClicked" />
+                </HorizontalStackLayout>
+                <RefreshView Command="{Binding LoadPaymentsCommand}" IsRefreshing="{Binding IsBusy}">
+                    <ListView x:Name="PaymentsListView" ItemsSource="{Binding Payments}"
+                              ItemSelected="PaymentsListView_OnItemSelected">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <ViewCell.View>
+                                        <Grid x:DataType="models:Payment" Margin="7,0">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="auto" />
+                                                <ColumnDefinition Width="180" />
                                             </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="1*" />
+                                                <RowDefinition Height="1*" />
+                                            </Grid.RowDefinitions>
 
-                                            <Label Grid.Column="0" Margin="0,0,0,10"
-                                                   Text="{Binding Path=Description, Converter={StaticResource NewLineRemoveConverter}}"
-                                                   LineBreakMode="TailTruncation"
-                                                   Opacity="0.7" />
+                                            <Label Grid.Row="0" Grid.Column="0" Margin="0,3" Text="{Binding Path=Name}"
+                                                   FontSize="16" FontAttributes="Bold" />
 
-                                            <Label Grid.Column="1" Margin="5,0,0,10"
-                                                   Text="{Binding Path=Type}"
+                                            <Label Grid.Row="0" Grid.Column="1" Margin="0,3"
+                                                   Text="{Binding Path=CreatedAt}"
                                                    HorizontalOptions="End" Opacity="0.5" />
+
+                                            <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="auto" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <Label Grid.Column="0" Margin="0,0,0,10"
+                                                       Text="{Binding Path=Description, Converter={StaticResource NewLineRemoveConverter}}"
+                                                       LineBreakMode="TailTruncation"
+                                                       Opacity="0.7" />
+
+                                                <Label Grid.Column="1" Margin="5,0,0,10"
+                                                       Text="{Binding Path=Type}"
+                                                       HorizontalOptions="End" Opacity="0.5" />
+                                            </Grid>
+
                                         </Grid>
+                                    </ViewCell.View>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </RefreshView>
 
-                                    </Grid>
-                                </ViewCell.View>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </RefreshView>
-
-            <Button Text="Refresh" Command="{Binding LoadPaymentsCommand}"
-                    IsEnabled="{Binding Path=IsBusy, Converter={StaticResource InvertBooleanConverter}}" />
-        </VerticalStackLayout>
+                <Button Text="Refresh" Command="{Binding LoadPaymentsCommand}"
+                        IsEnabled="{Binding Path=IsBusy, Converter={StaticResource InvertBooleanConverter}}" />
+            </VerticalStackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>
