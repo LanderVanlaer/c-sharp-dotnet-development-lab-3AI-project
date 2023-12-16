@@ -21,7 +21,8 @@ public class PaymentsViewModel : BaseViewModel
 
     public Command LoadPaymentsCommand { get; }
 
-    public IEnumerable<Payment> Payments => Repository.Payments ?? Enumerable.Empty<Payment>();
+    public IEnumerable<Payment> Payments =>
+        (Repository.Payments ?? Enumerable.Empty<Payment>()).OrderByDescending(payment => payment.CreatedAt);
 
     private void LoadPayments() => Task.Run(async () =>
     {
