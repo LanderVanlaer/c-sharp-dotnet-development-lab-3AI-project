@@ -18,5 +18,7 @@ public partial class GroupsView : ContentView, INotifyPropertyChanged
     {
         if (e.SelectedItem is Group group)
             await Navigation.PushAsync(new PaymentsPage(group));
+
+        GroupsListView.SelectedItem = null;
     }
 }

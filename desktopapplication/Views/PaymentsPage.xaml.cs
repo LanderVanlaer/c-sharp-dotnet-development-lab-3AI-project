@@ -21,6 +21,8 @@ public partial class PaymentsPage : ContentPage
     {
         if (e.SelectedItem is Payment payment)
             await Navigation.PushAsync(new PaymentRecordsPage(Group, payment));
+
+        PaymentsListView.SelectedItem = null;
     }
 
     private async void AddUser_OnClicked(object sender, EventArgs e) =>
