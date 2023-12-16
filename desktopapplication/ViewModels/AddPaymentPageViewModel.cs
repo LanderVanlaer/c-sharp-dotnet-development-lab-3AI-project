@@ -144,7 +144,8 @@ public class AddPaymentPageViewModel : BaseViewModel
                         entry => entry.UserId,
                         entry => entry.Amount,
                         (guid, amounts) => new services.PaymentEntry(guid, amounts.Sum())
-                    )));
+                    ).Where(entry => entry.Amount != 0)
+            ));
 
             await Shell.Current.Navigation.PopAsync();
         }
