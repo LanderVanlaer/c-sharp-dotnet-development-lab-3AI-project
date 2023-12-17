@@ -21,4 +21,6 @@ public partial class GroupsView : ContentView, INotifyPropertyChanged
 
         GroupsListView.SelectedItem = null;
     }
+
+    private void CreateGroup_OnClicked(object? sender, EventArgs e) => Navigation.PushAsync(new CreateGroupPage());
 }

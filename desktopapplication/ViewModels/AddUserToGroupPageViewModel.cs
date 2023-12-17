@@ -25,8 +25,7 @@ public class AddUserToGroupPageViewModel : BaseViewModel
     {
         if (Username.Trim() == String.Empty)
         {
-            if (Application.Current?.MainPage is not null)
-                await Application.Current.MainPage.DisplayAlert("Error", "Username cannot be empty", "OK");
+            await DisplayAlert("Error", "Username cannot be empty", "OK");
             return;
         }
 
@@ -36,18 +35,15 @@ public class AddUserToGroupPageViewModel : BaseViewModel
         }
         catch (UserNotFoundException e)
         {
-            if (Application.Current?.MainPage is not null)
-                await Application.Current.MainPage.DisplayAlert("Error", e.Message, "OK");
+            await DisplayAlert("Error", e.Message, "OK");
             return;
         }
         catch (ApiError e)
         {
-            if (Application.Current?.MainPage is not null)
-                await Application.Current.MainPage.DisplayAlert(
-                    "Error",
-                    e.Body?.Title != null ? e.Body.Title : e.Message,
-                    "OK"
-                );
+            await DisplayAlert(
+                "Error",
+                e.Body?.Title != null ? e.Body.Title : e.Message,
+                "OK");
             return;
         }
 
@@ -56,8 +52,7 @@ public class AddUserToGroupPageViewModel : BaseViewModel
             Repository.FetchUsers(_group.Id)
         );
 
-        if (Application.Current?.MainPage is not null)
-            await Application.Current.MainPage.DisplayAlert("", "User has been added to the group", "OK");
+        await DisplayAlert("", "User has been added to the group", "OK");
 
         await tasks;
         await Shell.Current.GoToAsync("..");

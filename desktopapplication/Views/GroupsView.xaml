@@ -11,6 +11,9 @@
     </ContentView.Resources>
     <ContentView.Content>
         <VerticalStackLayout>
+            <HorizontalStackLayout Spacing="16">
+                <Button Text="Create Group" Clicked="CreateGroup_OnClicked" />
+            </HorizontalStackLayout>
             <RefreshView Command="{Binding LoadGroupsCommand}" IsRefreshing="{Binding IsBusy}">
                 <ListView x:Name="GroupsListView" ItemsSource="{Binding Groups}"
                           ItemSelected="GroupsListView_OnItemSelected">

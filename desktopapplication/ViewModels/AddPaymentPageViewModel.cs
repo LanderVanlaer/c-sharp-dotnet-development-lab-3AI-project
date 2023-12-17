@@ -116,7 +116,7 @@ public class AddPaymentPageViewModel : BaseViewModel
 
         if (Name == String.Empty)
         {
-            await Shell.Current.DisplayAlert("Error", "Name cannot be empty", "OK");
+            await DisplayAlert("Error", "Name cannot be empty", "OK");
             return;
         }
 
@@ -150,7 +150,7 @@ public class AddPaymentPageViewModel : BaseViewModel
         }
         catch (ApiError e)
         {
-            await Shell.Current.DisplayAlert("Error",
+            await DisplayAlert("Error",
                 e.Body?.Errors != null && e.Body.Errors.Count != 0 ? string.Join("\n", e.Body.Errors) : e.Message,
                 "OK");
         }

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using desktopapplication.services;
 
@@ -59,5 +60,17 @@ public abstract class BaseViewModel : INotifyPropertyChanged
         field = value;
         OnPropertyChanged(propertyName);
         return true;
+    }
+
+    protected static async Task DisplayAlert(string title, string message, string cancel)
+    {
+        Debug.WriteLine("DisplayAlert called " + title + " " + message + " " + cancel);
+        if (Application.Current?.MainPage is not null)
+        {
+            await Application.Current.MainPage.DisplayAlert(title, message, cancel);
+            return;
+        }
+
+        await Shell.Current.DisplayAlert(title, message, cancel);
     }
 }

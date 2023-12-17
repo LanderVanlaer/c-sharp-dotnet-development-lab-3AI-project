@@ -97,6 +97,20 @@ public class RestApiService : IRepository
         return Groups;
     }
 
+    public async Task<Group> CreateGroup(string name)
+    {
+        string body = JsonConvert.SerializeObject(new { Name = name });
+
+        HttpResponseMessage response = await MakeRequest("groups", MethodType.Post, body);
+
+        string content = await response.Content.ReadAsStringAsync();
+
+        await FetchGroups();
+
+        return JsonConvert.DeserializeObject<Group>(content, _serializerOptions) ??
+               throw new Exception("No group found");
+    }
+
     public async Task AddUserToGroup(Guid groupId, string username)
     {
         try
