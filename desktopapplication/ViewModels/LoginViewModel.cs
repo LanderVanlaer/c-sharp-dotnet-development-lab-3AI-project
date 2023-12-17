@@ -43,6 +43,9 @@ public class LoginViewModel : BaseViewModel
         {
             await LoadOnTask(Repository.Login(Username, Password));
 
+            Username = string.Empty;
+            Password = string.Empty;
+
             //go to home page after login
             await Shell.Current.Navigation.PopToRootAsync();
         }
