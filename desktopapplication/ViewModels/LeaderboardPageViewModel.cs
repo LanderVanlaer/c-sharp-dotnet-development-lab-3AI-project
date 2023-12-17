@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using desktopapplication.Models;
+using desktopapplication.Views;
 
 namespace desktopapplication.ViewModels;
 
@@ -97,7 +98,7 @@ public class LeaderboardPageViewModel : BaseViewModel
         {
             decimal amount = Math.Min(needsMoney.Amount, Math.Abs(givesMoney.Amount));
 
-            whoHasToPayWho.Add(new WhoHasToPayWho
+            whoHasToPayWho.Add(new WhoHasToPayWho(Group)
             {
                 WhoUserId = givesMoney.UserId,
                 ToWhomUserId = needsMoney.UserId,
@@ -164,9 +165,30 @@ public record LeaderboardItemWrapper : INotifyPropertyChanged
 
 public record WhoHasToPayWho
 {
+    public WhoHasToPayWho(Group group)
+    {
+        Group = group;
+        NavigateToAddPaymentCommand = new Command(NavigateToAddPayment);
+    }
+
+    private Group Group { get; }
+
     public Guid WhoUserId { get; init; }
     public Guid ToWhomUserId { get; init; }
     public decimal Amount { get; init; }
+    public Command NavigateToAddPaymentCommand { get; }
+
+    public void NavigateToAddPayment()
+    {
+        Shell.Current.Navigation.PushAsync(
+            new AddPaymentPage(Group,
+                new[]
+                {
+                    new AddPaymentUsersMoney(WhoUserId, -Amount),
+                    new AddPaymentUsersMoney(ToWhomUserId, Amount),
+                })
+        );
+    }
 }
 
 internal record InternalLeaderboardItemStruct

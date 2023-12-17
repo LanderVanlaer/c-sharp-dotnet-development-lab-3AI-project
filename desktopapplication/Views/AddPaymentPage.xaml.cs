@@ -8,11 +8,11 @@ public partial class AddPaymentPage : ContentPage
     private readonly Group _group;
     private readonly AddPaymentPageViewModel _viewModel;
 
-    public AddPaymentPage(Group group)
+    public AddPaymentPage(Group group, IEnumerable<AddPaymentUsersMoney>? paymentUsersMoney = null)
     {
         InitializeComponent();
         _group = group;
 
-        BindingContext = _viewModel = new AddPaymentPageViewModel(_group);
+        BindingContext = _viewModel = new AddPaymentPageViewModel(_group, paymentUsersMoney);
     }
 }

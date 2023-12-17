@@ -100,7 +100,14 @@
                                            Text="{Binding Path=Amount,
                                               Converter={StaticResource DecimalTo2DecimalStringConverter}}"
                                            Margin="0,7,0,0" VerticalTextAlignment="Center" FontSize="17"
+                                           VerticalOptions="Center"
                                            HorizontalTextAlignment="End" />
+
+                                    <Button Grid.Row="1" Grid.Column="2"
+                                            Command="{Binding Path=NavigateToAddPaymentCommand}" Text="Pay" Padding="0"
+                                            Margin="0,5,0,0"
+                                            VerticalOptions="Center"
+                                            FontSize="14" />
                                 </Grid>
                             </ViewCell>
                         </DataTemplate>

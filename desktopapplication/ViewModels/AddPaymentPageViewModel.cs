@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using desktopapplication.Models;
@@ -11,13 +12,15 @@ public class AddPaymentPageViewModel : BaseViewModel
 {
     private readonly Group _group;
     private string _description = String.Empty;
+
+    private bool _isDisabledAutoSetAmounts;
     private string _name = String.Empty;
     private ObservableCollection<PaymentEntry> _paymentEntriesHasToPay = [];
     private ObservableCollection<PaymentEntry> _paymentEntriesPayed = [];
 
     private int _paymentTypeIndex;
 
-    public AddPaymentPageViewModel(Group group)
+    public AddPaymentPageViewModel(Group group, IEnumerable<AddPaymentUsersMoney>? paymentUsersMoney = null)
     {
         _group = group;
         PaymentTypeIndex = 0;
@@ -63,6 +66,33 @@ public class AddPaymentPageViewModel : BaseViewModel
                         return paymentEntry;
                     })
                 );
+
+                if (paymentUsersMoney == null) return;
+
+                IsDisabledAutoSetAmounts = true;
+
+
+                foreach (AddPaymentUsersMoney paymentUsersMoneyEntry in paymentUsersMoney)
+                {
+                    if (paymentUsersMoneyEntry.Amount == 0) continue;
+
+                    PaymentEntry? paymentEntry =
+                        (paymentUsersMoneyEntry.Amount < 0 ? PaymentEntriesPayed : PaymentEntriesHasToPay)
+                        .FirstOrDefault(
+                            entry => entry != null && entry.User.Id == paymentUsersMoneyEntry.UserId,
+                            null
+                        );
+
+                    if (paymentEntry is null)
+                    {
+                        Debug.WriteLine("User with id " + paymentUsersMoneyEntry.UserId + " not found");
+                        continue;
+                    }
+
+                    paymentEntry.Amount = Math.Abs(paymentUsersMoneyEntry.Amount);
+                }
+
+                IsDisabledAutoSetAmounts = false;
             });
     }
 
@@ -109,6 +139,12 @@ public class AddPaymentPageViewModel : BaseViewModel
     }
 
     public Command ResetPaymentEntriesHasToPayCommand { get; }
+
+    public bool IsDisabledAutoSetAmounts
+    {
+        get => _isDisabledAutoSetAmounts;
+        set => SetField(ref _isDisabledAutoSetAmounts, value);
+    }
 
     private async void Save()
     {
@@ -163,6 +199,8 @@ public class AddPaymentPageViewModel : BaseViewModel
 
     private void AutoSetAmounts()
     {
+        if (IsDisabledAutoSetAmounts) return;
+
         decimal totalAmount = PaymentEntriesPayed.Sum(entry => entry.Amount);
         decimal amountPerUser = totalAmount / PaymentEntriesHasToPay.Count;
 
@@ -268,4 +306,10 @@ public class PaymentEntry(User user) : INotifyPropertyChanged
         OnPropertyChanged(propertyName);
         return true;
     }
+}
+
+public struct AddPaymentUsersMoney(Guid userId, decimal amount)
+{
+    public Guid UserId { get; set; } = userId;
+    public decimal Amount { get; set; } = amount;
 }
