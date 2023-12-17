@@ -17,6 +17,7 @@ public interface IRepository : INotifyPropertyChanged
 
     Task Login(string username, string password);
     Task<User> Register(string username, string password);
+    void Logout();
 
     Task<ICollection<Group>> FetchGroups();
     Task<Group> CreateGroup(string name);

@@ -310,6 +310,18 @@ public class RestApiService : IRepository
         return user;
     }
 
+    public void Logout()
+    {
+        JsonWebToken = null;
+        Groups = null;
+        Payments = null;
+        Users = null;
+        User = null;
+        Leaderboard = null;
+
+        Debug.WriteLine("Logged out");
+    }
+
     /// <summary>
     ///     Makes a request and checks if the response is successful.
     ///     If the response is successful, the response is returned.

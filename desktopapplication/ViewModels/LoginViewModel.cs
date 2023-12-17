@@ -36,16 +36,19 @@ public class LoginViewModel : BaseViewModel
 
     public bool HasMessage => Message != null;
 
-    private void Login() => Task.Run(async () =>
+    private async void Login()
     {
         Message = null;
         try
         {
             await LoadOnTask(Repository.Login(Username, Password));
+
+            //go to home page after login
+            await Shell.Current.Navigation.PopToRootAsync();
         }
         catch (WrongLoginCredentialsException e)
         {
             Message = e.Message;
         }
-    });
+    }
 }

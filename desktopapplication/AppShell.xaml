@@ -22,6 +22,12 @@
         <ShellContent Title="Profile" Route="Profile" ContentTemplate="{DataTemplate views:ProfilePage}" />
         <ShellContent Title="Edit" Route="Edit" ContentTemplate="{DataTemplate views:ProfileEditPage}" />
     </FlyoutItem>
+    <Shell.FlyoutFooterTemplate>
+        <DataTemplate>
+            <Button IsVisible="{Binding Path=IsAuthenticated}" Text="Logout" Clicked="Logout_OnClicked" Margin="38,10"
+                    BackgroundColor="Black" TextColor="White" HorizontalOptions="Start" />
+        </DataTemplate>
+    </Shell.FlyoutFooterTemplate>
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems"
                 x:Name="LoginFlyoutItem"
                 Title="Login"

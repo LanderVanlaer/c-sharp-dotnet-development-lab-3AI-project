@@ -21,8 +21,12 @@ public class LeaderboardPageViewModel : BaseViewModel
             {
                 case nameof(Repository.Leaderboard):
                     OnPropertyChanged(nameof(Leaderboard));
-                    MaxAmount = Math.Abs(Leaderboard.Last().LeaderboardItem.Amount);
+                    IEnumerable<LeaderboardItemWrapper> leaderboard = Leaderboard;
+                    if (leaderboard.Any())
+                        MaxAmount = Math.Abs(Leaderboard.Last().LeaderboardItem.Amount);
+
                     CalculateWhoHasToPayWho();
+
                     break;
             }
         };

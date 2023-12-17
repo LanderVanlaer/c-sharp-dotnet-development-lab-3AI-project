@@ -25,4 +25,11 @@ public partial class AppShell : Shell
 
     public bool IsAuthenticated => _repository.IsAuthenticated;
     public bool IsNotAuthenticated => !_repository.IsAuthenticated;
+
+    private void Logout_OnClicked(object? sender, EventArgs e)
+    {
+        _repository.Logout();
+
+        Current.Navigation.PopToRootAsync();
+    }
 }
