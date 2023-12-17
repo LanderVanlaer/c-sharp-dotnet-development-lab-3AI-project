@@ -105,6 +105,7 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
+                <Button Text="Refresh" Command="{Binding Path=LoadLeaderboardCommand}" Margin="0,20,0,0" />
             </VerticalStackLayout>
         </ScrollView>
     </ContentPage.Content>

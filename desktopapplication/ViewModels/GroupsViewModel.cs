@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using desktopapplication.Models;
+﻿using desktopapplication.Models;
 
 namespace desktopapplication.ViewModels;
 
