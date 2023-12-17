@@ -26,7 +26,11 @@ public class PaymentsViewModel : BaseViewModel
 
     private void LoadPayments() => Task.Run(async () =>
     {
-        await LoadOnTask(Repository.FetchPayments(Group.Id));
+        await LoadOnTask(Task.WhenAll(
+            Repository.FetchPayments(Group.Id),
+            Repository.FetchUsers(Group.Id)
+        ));
+
         OnPropertyChanged(nameof(Payments));
     });
 }

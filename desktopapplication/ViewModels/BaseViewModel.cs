@@ -10,6 +10,14 @@ public abstract class BaseViewModel : INotifyPropertyChanged
     protected readonly IRepository Repository = DependencyService.Get<IRepository>();
     private bool _isBusy;
 
+    protected BaseViewModel()
+    {
+        Repository.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(Repository.IsAuthenticated) && Repository.IsAuthenticated)
+                OnAuthenticated();
+        };
+    }
 
     public bool IsBusy
     {
@@ -72,5 +80,9 @@ public abstract class BaseViewModel : INotifyPropertyChanged
         }
 
         await Shell.Current.DisplayAlert(title, message, cancel);
+    }
+
+    protected virtual void OnAuthenticated()
+    {
     }
 }

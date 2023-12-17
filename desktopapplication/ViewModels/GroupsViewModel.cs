@@ -1,4 +1,5 @@
-﻿using desktopapplication.Models;
+﻿using System.Diagnostics;
+using desktopapplication.Models;
 
 namespace desktopapplication.ViewModels;
 
@@ -8,15 +9,21 @@ public class GroupsViewModel : BaseViewModel
     {
         LoadGroupsCommand = new Command(LoadGroups);
         LoadGroups();
+
+        Repository.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(Repository.Groups)) OnPropertyChanged(nameof(Groups));
+        };
     }
 
     public Command LoadGroupsCommand { get; }
 
     public IEnumerable<Group> Groups => Repository.Groups ?? Enumerable.Empty<Group>();
 
-    private void LoadGroups() => Task.Run(async () =>
+    private async void LoadGroups()
     {
         await LoadOnTask(Repository.FetchGroups());
-        OnPropertyChanged(nameof(Groups));
-    });
+    }
+
+    protected override void OnAuthenticated() => LoadGroups();
 }

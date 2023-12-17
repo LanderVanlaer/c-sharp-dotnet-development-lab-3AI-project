@@ -39,4 +39,6 @@ public class PaymentRecordsViewModel : BaseViewModel
 
         StopLoading();
     });
+
+    protected override void OnAuthenticated() => LoadPaymentRecords();
 }
