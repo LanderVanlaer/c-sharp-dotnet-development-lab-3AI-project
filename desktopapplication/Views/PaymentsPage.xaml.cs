@@ -30,4 +30,7 @@ public partial class PaymentsPage : ContentPage
 
     private async void AddPayment_OnClicked(object sender, EventArgs e) =>
         await Navigation.PushAsync(new AddPaymentPage(Group));
+
+    private async void OpenLeaderboard_OnClicked(object sender, EventArgs e) =>
+        await Navigation.PushAsync(new LeaderboardPage(Group));
 }

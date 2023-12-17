@@ -17,6 +17,7 @@
                 <HorizontalStackLayout Spacing="16">
                     <Button Text="Add User" Clicked="AddUser_OnClicked" />
                     <Button Text="Add Payment" Clicked="AddPayment_OnClicked" />
+                    <Button Text="Leaderboard" Clicked="OpenLeaderboard_OnClicked" />
                 </HorizontalStackLayout>
                 <RefreshView Command="{Binding LoadPaymentsCommand}" IsRefreshing="{Binding IsBusy}">
                     <ListView x:Name="PaymentsListView" ItemsSource="{Binding Payments}"

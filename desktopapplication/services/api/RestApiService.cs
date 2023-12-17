@@ -40,6 +40,12 @@ public class RestApiService : IRepository
         set => SetField(ref _user, value);
     }
 
+    public ICollection<LeaderboardItem>? Leaderboard
+    {
+        get => _leaderboard;
+        set => SetField(ref _leaderboard, value);
+    }
+
     #endregion
 
     #region Fields
@@ -72,6 +78,7 @@ public class RestApiService : IRepository
     private ICollection<Group>? _groups;
     private ICollection<Payment>? _payments;
     private ICollection<User>? _users;
+    public ICollection<LeaderboardItem>? _leaderboard;
 
     #endregion
 
@@ -199,6 +206,17 @@ public class RestApiService : IRepository
         await FetchPayments(groupId);
         return JsonConvert.DeserializeObject<Payment>(content, _serializerOptions) ??
                throw new Exception("No payment found");
+    }
+
+    public async Task<ICollection<LeaderboardItem>> FetchLeaderboard(Guid groupId)
+    {
+        HttpResponseMessage response = await MakeRequest($"groups/{groupId}/leaderboard", MethodType.Get);
+
+        string content = await response.Content.ReadAsStringAsync();
+        Leaderboard = JsonConvert.DeserializeObject<List<LeaderboardItem>>(content, _serializerOptions) ??
+                      throw new Exception("No leaderboard found");
+
+        return Leaderboard;
     }
 
     /// <summary>

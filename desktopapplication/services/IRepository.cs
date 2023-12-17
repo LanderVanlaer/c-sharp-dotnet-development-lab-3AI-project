@@ -31,6 +31,9 @@ public interface IRepository : INotifyPropertyChanged
         string name,
         string description,
         IEnumerable<PaymentEntry> paymentEntries);
+
+    ICollection<LeaderboardItem>? Leaderboard { get; }
+    Task<ICollection<LeaderboardItem>> FetchLeaderboard(Guid groupId);
 }
 
 public record PaymentEntry(Guid UserId, decimal Amount);
