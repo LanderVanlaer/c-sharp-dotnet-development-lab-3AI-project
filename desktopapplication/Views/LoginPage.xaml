@@ -14,8 +14,6 @@
                 <Label Text="Password" />
                 <Entry Text="{Binding Password}" IsPassword="True" />
             </StackLayout>
-            <Label Margin="0,5, 0, 10" Text="{Binding Message}"
-                   IsVisible="{Binding Path=HasMessage}" TextColor="OrangeRed" FontAttributes="Bold" />
             <HorizontalStackLayout>
                 <Button Text="Login" Command="{Binding LoginCommand}" />
                 <ActivityIndicator x:Name="ActivityIndicator" IsRunning="{Binding IsBusy}" />

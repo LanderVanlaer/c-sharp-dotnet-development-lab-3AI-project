@@ -55,11 +55,6 @@
                 </ScrollView>
             </RefreshView>
 
-            <Label Margin="0,5, 0, 10" Text="{Binding Message}"
-                   IsVisible="{Binding Path=HasMessage}" TextColor="OrangeRed" FontAttributes="Bold" />
-            <Label Margin="0,5, 0, 10" Text="{Binding OkMessage}"
-                   IsVisible="{Binding Path=HasOkMessage}" TextColor="Green" FontAttributes="Bold" />
-
             <Button Text="Update" Command="{Binding UpdateUserCommand}"
                     IsEnabled="{Binding Path=IsBusy, Converter={StaticResource InvertBooleanConverter}}" />
         </VerticalStackLayout>

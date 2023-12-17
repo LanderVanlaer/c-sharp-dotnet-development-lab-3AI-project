@@ -36,13 +36,11 @@ public class ProfileEditPageViewModel : BaseViewModel
         OnPropertyChanged(nameof(User));
     });
 
-    private void UpdateUser() => Task.Run(async () =>
+    private async void UpdateUser()
     {
-        Message = OkMessage = null;
-
         if (Password != PasswordConfirm)
         {
-            Message = "Passwords do not match";
+            await DisplayAlert("Error", "Passwords do not match", "Ok");
             return;
         }
 
@@ -50,26 +48,25 @@ public class ProfileEditPageViewModel : BaseViewModel
         {
             await LoadOnTask(Repository.UpdateUser(Username, Password == String.Empty ? null : Password));
 
-            OkMessage = "Successfully registered";
+            await DisplayAlert("", "Successfully registered", "Ok");
         }
         catch (UserNameAlreadyExistsException e)
         {
-            Message = e.Message;
+            await DisplayAlert("Error", e.Message, "Ok");
         }
         catch (ApiError e)
         {
-            Message = e.Body?.Errors != null && e.Body.Errors.Count != 0 ? string.Join("\n", e.Body.Errors) : e.Message;
+            await DisplayAlert("Error",
+                e.Body?.Errors != null && e.Body.Errors.Count != 0 ? string.Join("\n", e.Body.Errors) : e.Message,
+                "Ok");
         }
-    });
+    }
 
     #region Private Fields
 
     private string _username = string.Empty;
     private string _password = string.Empty;
     private string _passwordConfirm = string.Empty;
-
-    private string? _message;
-    private string? _okMessage;
 
     #endregion
 
@@ -95,30 +92,6 @@ public class ProfileEditPageViewModel : BaseViewModel
         get => _passwordConfirm;
         set => SetField(ref _passwordConfirm, value);
     }
-
-    public string? Message
-    {
-        get => _message;
-        set
-        {
-            SetField(ref _message, value);
-            OnPropertyChanged(nameof(HasMessage));
-        }
-    }
-
-    public bool HasMessage => Message != null;
-
-    public string? OkMessage
-    {
-        get => _okMessage;
-        set
-        {
-            SetField(ref _okMessage, value);
-            OnPropertyChanged(nameof(HasOkMessage));
-        }
-    }
-
-    public bool HasOkMessage => OkMessage != null;
 
     #endregion
 }

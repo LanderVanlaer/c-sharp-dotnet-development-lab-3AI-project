@@ -4,8 +4,6 @@ namespace desktopapplication.ViewModels;
 
 public class RegisterViewModel : BaseViewModel
 {
-    private string? _message;
-    private string? _okMessage;
     private string _password = string.Empty;
     private string _passwordConfirmation = string.Empty;
     private string _username = string.Empty;
@@ -32,38 +30,11 @@ public class RegisterViewModel : BaseViewModel
         set => SetField(ref _passwordConfirmation, value);
     }
 
-    public string? Message
+    private async void Register()
     {
-        get => _message;
-        set
-        {
-            SetField(ref _message, value);
-            OnPropertyChanged(nameof(HasMessage));
-        }
-    }
-
-    public bool HasMessage => Message != null;
-
-    public string? OkMessage
-    {
-        get => _okMessage;
-        set
-        {
-            SetField(ref _okMessage, value);
-            OnPropertyChanged(nameof(HasOkMessage));
-        }
-    }
-
-    public bool HasOkMessage => OkMessage != null;
-
-    private void Register() => Task.Run(async () =>
-    {
-        Message = null;
-        OkMessage = null;
-
         if (Password != PasswordConfirmation)
         {
-            Message = "Passwords do not match";
+            await DisplayAlert("Error", "Passwords do not match", "Ok");
             return;
         }
 
@@ -72,15 +43,18 @@ public class RegisterViewModel : BaseViewModel
             await LoadOnTask(Repository.Register(Username, Password));
             Username = Password = PasswordConfirmation = String.Empty;
 
-            OkMessage = "Successfully registered";
+            await DisplayAlert("Error", "Successfully registered", "Ok");
         }
         catch (UserNameAlreadyExistsException e)
         {
-            Message = e.Message;
+            await DisplayAlert("Error", e.Message, "Ok");
         }
         catch (ApiError e)
         {
-            Message = e.Body?.Errors != null && e.Body.Errors.Count != 0 ? string.Join("\n", e.Body.Errors) : e.Message;
+            await DisplayAlert(
+                "Error",
+                e.Body?.Errors != null && e.Body.Errors.Count != 0 ? string.Join("\n", e.Body.Errors) : e.Message,
+                "Ok");
         }
-    });
+    }
 }

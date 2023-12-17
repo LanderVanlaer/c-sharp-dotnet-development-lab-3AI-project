@@ -4,7 +4,6 @@ namespace desktopapplication.ViewModels;
 
 public class LoginViewModel : BaseViewModel
 {
-    private string? _message;
     private string _password = string.Empty;
     private string _username = string.Empty;
 
@@ -24,21 +23,8 @@ public class LoginViewModel : BaseViewModel
         set => SetField(ref _password, value);
     }
 
-    public string? Message
-    {
-        get => _message;
-        set
-        {
-            SetField(ref _message, value);
-            OnPropertyChanged(nameof(HasMessage));
-        }
-    }
-
-    public bool HasMessage => Message != null;
-
     private async void Login()
     {
-        Message = null;
         try
         {
             await LoadOnTask(Repository.Login(Username, Password));
@@ -51,7 +37,7 @@ public class LoginViewModel : BaseViewModel
         }
         catch (WrongLoginCredentialsException e)
         {
-            Message = e.Message;
+            await DisplayAlert("Login failed", e.Message, "Try again");
         }
     }
 }
