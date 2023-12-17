@@ -10,35 +10,37 @@
         <converters:InvertBooleanConverter x:Key="InvertBooleanConverter" />
     </ContentView.Resources>
     <ContentView.Content>
-        <VerticalStackLayout>
-            <HorizontalStackLayout Spacing="16">
-                <Button Text="Create Group" Clicked="CreateGroup_OnClicked" />
-            </HorizontalStackLayout>
-            <RefreshView Command="{Binding LoadGroupsCommand}" IsRefreshing="{Binding IsBusy}">
-                <ListView x:Name="GroupsListView" ItemsSource="{Binding Groups}"
-                          ItemSelected="GroupsListView_OnItemSelected">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <ViewCell.View>
-                                    <Grid x:DataType="models:Group">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
-                                        <Label Grid.Column="0" Margin="10" Text="{Binding Path=Name}" />
-                                        <Label Grid.Column="1" Margin="10" Text="{Binding Path=CreatedAt}"
-                                               HorizontalOptions="End" Opacity="0.5" />
-                                    </Grid>
-                                </ViewCell.View>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </RefreshView>
+        <ScrollView>
+            <VerticalStackLayout>
+                <HorizontalStackLayout Spacing="16">
+                    <Button Text="Create Group" Clicked="CreateGroup_OnClicked" />
+                </HorizontalStackLayout>
+                <RefreshView Command="{Binding LoadGroupsCommand}" IsRefreshing="{Binding IsBusy}">
+                    <ListView x:Name="GroupsListView" ItemsSource="{Binding Groups}"
+                              ItemSelected="GroupsListView_OnItemSelected">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <ViewCell.View>
+                                        <Grid x:DataType="models:Group">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Column="0" Margin="10" Text="{Binding Path=Name}" />
+                                            <Label Grid.Column="1" Margin="10" Text="{Binding Path=CreatedAt}"
+                                                   HorizontalOptions="End" Opacity="0.5" />
+                                        </Grid>
+                                    </ViewCell.View>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </RefreshView>
 
-            <Button Text="Refresh" Command="{Binding LoadGroupsCommand}"
-                    IsEnabled="{Binding Path=IsBusy, Converter={StaticResource InvertBooleanConverter}}" />
-        </VerticalStackLayout>
+                <Button Text="Refresh" Command="{Binding LoadGroupsCommand}"
+                        IsEnabled="{Binding Path=IsBusy, Converter={StaticResource InvertBooleanConverter}}" />
+            </VerticalStackLayout>
+        </ScrollView>
     </ContentView.Content>
 </ContentView>
