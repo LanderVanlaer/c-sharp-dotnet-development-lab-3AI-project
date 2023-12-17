@@ -7,6 +7,7 @@ namespace desktopapplication.ViewModels;
 public class LeaderboardPageViewModel : BaseViewModel
 {
     private double _listViewWidth;
+    private ICollection<WhoHasToPayWho> _whoHasToPayWho = new List<WhoHasToPayWho>();
 
     public LeaderboardPageViewModel(Group group)
     {
@@ -21,12 +22,19 @@ public class LeaderboardPageViewModel : BaseViewModel
                 case nameof(Repository.Leaderboard):
                     OnPropertyChanged(nameof(Leaderboard));
                     MaxAmount = Math.Abs(Leaderboard.Last().LeaderboardItem.Amount);
+                    CalculateWhoHasToPayWho();
                     break;
             }
         };
 
         LoadLeaderboardCommand = new Command(LoadLeaderboard);
         LoadLeaderboard();
+    }
+
+    public ICollection<WhoHasToPayWho> WhoHasToPayWho
+    {
+        get => _whoHasToPayWho;
+        set => SetField(ref _whoHasToPayWho, value);
     }
 
     private Group Group { get; }
@@ -52,6 +60,59 @@ public class LeaderboardPageViewModel : BaseViewModel
         Enumerable.Empty<LeaderboardItemWrapper>();
 
     public decimal MaxAmount { get; private set; }
+
+    private void CalculateWhoHasToPayWho()
+    {
+        if (Repository.Leaderboard is null)
+        {
+            WhoHasToPayWho = [];
+            return;
+        }
+
+        Queue<InternalLeaderboardItemStruct> hasToGetPayedList =
+            new(Repository.Leaderboard
+                .Where(leaderboardItem => leaderboardItem.Amount > 0)
+                .OrderByDescending(item => item.Amount)
+                .ThenBy(item => item.UserId)
+                .Select(item => new InternalLeaderboardItemStruct(item))
+            );
+        Queue<InternalLeaderboardItemStruct> hasToPayList =
+            new(Repository.Leaderboard
+                .Where(leaderboardItem => leaderboardItem.Amount < 0)
+                .OrderBy(item => item.Amount)
+                .ThenBy(item => item.UserId)
+                .Select(item => new InternalLeaderboardItemStruct(item))
+            );
+
+        List<WhoHasToPayWho> whoHasToPayWho = [];
+
+        InternalLeaderboardItemStruct? needsMoney = hasToGetPayedList.Dequeue();
+        InternalLeaderboardItemStruct? givesMoney = hasToPayList.Dequeue();
+
+        while (needsMoney is not null && givesMoney is not null)
+        {
+            decimal amount = Math.Min(needsMoney.Amount, Math.Abs(givesMoney.Amount));
+
+            whoHasToPayWho.Add(new WhoHasToPayWho
+            {
+                WhoUserId = givesMoney.UserId,
+                ToWhomUserId = needsMoney.UserId,
+                Amount = amount,
+            });
+
+            if (needsMoney.Amount == amount)
+                needsMoney = hasToGetPayedList.Count > 0 ? hasToGetPayedList.Dequeue() : null;
+            else
+                needsMoney.Amount -= amount;
+
+            if (givesMoney.Amount == -amount)
+                givesMoney = hasToPayList.Count > 0 ? hasToPayList.Dequeue() : null;
+            else
+                givesMoney.Amount += amount;
+        }
+
+        WhoHasToPayWho = whoHasToPayWho;
+    }
 
     private void LoadLeaderboard() => Task.Run(async () =>
     {
@@ -95,4 +156,23 @@ public record LeaderboardItemWrapper : INotifyPropertyChanged
 
     private void OnPropertyChanged([CallerMemberName] string? propertyName = null) =>
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+}
+
+public record WhoHasToPayWho
+{
+    public Guid WhoUserId { get; init; }
+    public Guid ToWhomUserId { get; init; }
+    public decimal Amount { get; init; }
+}
+
+internal record InternalLeaderboardItemStruct
+{
+    public InternalLeaderboardItemStruct(LeaderboardItem item)
+    {
+        UserId = item.UserId;
+        Amount = item.Amount;
+    }
+
+    public Guid UserId { get; init; }
+    public decimal Amount { get; set; }
 }

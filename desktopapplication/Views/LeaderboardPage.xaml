@@ -60,6 +60,51 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
+                <BoxView HeightRequest="1" Color="White" Margin="50,20" Opacity=".5" />
+                <ListView ItemsSource="{Binding Path=WhoHasToPayWho}" MinimumWidthRequest="200"
+                          MaximumWidthRequest="400">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="viewModels:WhoHasToPayWho">
+                            <ViewCell>
+                                <Grid Margin="20">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*" />
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="1*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+
+                                    <Label Grid.Row="0" Grid.Column="0"
+                                           Text="{Binding Path=WhoUserId,
+                                            Converter={StaticResource IdToUserNameConverter}}"
+                                           VerticalTextAlignment="Center"
+                                           HorizontalTextAlignment="End" />
+
+                                    <Label Grid.Row="0" Grid.Column="1"
+                                           Text="&#8594;"
+                                           FontSize="21"
+                                           Margin="10,0"
+                                           VerticalTextAlignment="Center" />
+
+                                    <Label Grid.Row="0" Grid.Column="2"
+                                           Text="{Binding Path=ToWhomUserId,
+                                            Converter={StaticResource IdToUserNameConverter}}"
+                                           VerticalTextAlignment="Center" />
+
+
+                                    <Label Grid.Row="1" Grid.Column="0"
+                                           Text="{Binding Path=Amount,
+                                              Converter={StaticResource DecimalTo2DecimalStringConverter}}"
+                                           Margin="0,7,0,0" VerticalTextAlignment="Center" FontSize="17"
+                                           HorizontalTextAlignment="End" />
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
             </VerticalStackLayout>
         </ScrollView>
     </ContentPage.Content>

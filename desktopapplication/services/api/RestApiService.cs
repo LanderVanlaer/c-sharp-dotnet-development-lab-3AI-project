@@ -78,7 +78,7 @@ public class RestApiService : IRepository
     private ICollection<Group>? _groups;
     private ICollection<Payment>? _payments;
     private ICollection<User>? _users;
-    public ICollection<LeaderboardItem>? _leaderboard;
+    private ICollection<LeaderboardItem>? _leaderboard;
 
     #endregion
 
