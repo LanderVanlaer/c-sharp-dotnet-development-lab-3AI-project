@@ -13,6 +13,8 @@ public interface IRepository : INotifyPropertyChanged
     ICollection<User>? Users { get; }
     ICollection<Payment>? Payments { get; }
 
+    ICollection<LeaderboardItem>? Leaderboard { get; }
+
     Task Login(string username, string password);
     Task<User> Register(string username, string password);
 
@@ -32,7 +34,6 @@ public interface IRepository : INotifyPropertyChanged
         string description,
         IEnumerable<PaymentEntry> paymentEntries);
 
-    ICollection<LeaderboardItem>? Leaderboard { get; }
     Task<ICollection<LeaderboardItem>> FetchLeaderboard(Guid groupId);
 }
 

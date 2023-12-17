@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using desktopapplication.Models;
-using desktopapplication.services;
 using desktopapplication.services.api;
 
 namespace desktopapplication.ViewModels;

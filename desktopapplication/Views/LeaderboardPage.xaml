@@ -28,14 +28,12 @@
                                             IsVisible="{Binding Path=IsPositive}"
                                             Text="{Binding Path=LeaderboardItem.UserId,
                                             Converter={StaticResource IdToUserNameConverter}}"
-                                            Margin="0,0,5,0" VerticalTextAlignment="Center">
-                                        </Label>
+                                            Margin="0,0,5,0" VerticalTextAlignment="Center" />
                                         <Label
                                             IsVisible="{Binding Path=IsPositive}"
                                             Text="{Binding Path=LeaderboardItem.Amount,
                                             Converter={StaticResource DecimalTo2DecimalStringConverter}}"
-                                            Margin="0,0,10,0" VerticalTextAlignment="Center">
-                                        </Label>
+                                            Margin="0,0,10,0" VerticalTextAlignment="Center" />
                                         <Rectangle Fill="#B82525" IsVisible="{Binding Path=IsNegative}"
                                                    WidthRequest="{Binding Path=PixelWidth}"
                                                    HeightRequest="50"
@@ -46,14 +44,12 @@
                                             IsVisible="{Binding Path=IsNegative}"
                                             Text="{Binding Path=LeaderboardItem.Amount,
                                             Converter={StaticResource DecimalTo2DecimalStringConverter}}"
-                                            Margin="10,0,0,0" VerticalTextAlignment="Center">
-                                        </Label>
+                                            Margin="10,0,0,0" VerticalTextAlignment="Center" />
                                         <Label
                                             IsVisible="{Binding Path=IsNegative}"
                                             Text="{Binding Path=LeaderboardItem.UserId,
                                             Converter={StaticResource IdToUserNameConverter}}"
-                                            Margin="5,0,0,0" VerticalTextAlignment="Center">
-                                        </Label>
+                                            Margin="5,0,0,0" VerticalTextAlignment="Center" />
                                         <Rectangle Fill="#25B84E" IsVisible="{Binding Path=IsPositive}"
                                                    WidthRequest="{Binding Path=PixelWidth}"
                                                    HeightRequest="50"

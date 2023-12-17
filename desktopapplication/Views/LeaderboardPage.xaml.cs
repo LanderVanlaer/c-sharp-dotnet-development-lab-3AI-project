@@ -5,8 +5,8 @@ namespace desktopapplication.Views;
 
 public partial class LeaderboardPage : ContentPage
 {
-    private readonly LeaderboardPageViewModel _leaderboardPageViewModel;
     private readonly Group _group;
+    private readonly LeaderboardPageViewModel _leaderboardPageViewModel;
 
     public LeaderboardPage(Group group)
     {

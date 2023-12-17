@@ -7,19 +7,6 @@ namespace desktopapplication.ViewModels;
 public class LeaderboardPageViewModel : BaseViewModel
 {
     private double _listViewWidth;
-    private Group Group { get; }
-
-    public double ListViewWidth
-    {
-        get => _listViewWidth;
-        set
-        {
-            if (value.Equals(_listViewWidth)) return;
-
-            SetField(ref _listViewWidth, value);
-            OnPropertyChanged(nameof(LeaderboardItemWrapper.PixelWidth));
-        }
-    }
 
     public LeaderboardPageViewModel(Group group)
     {
@@ -42,6 +29,20 @@ public class LeaderboardPageViewModel : BaseViewModel
         LoadLeaderboard();
     }
 
+    private Group Group { get; }
+
+    public double ListViewWidth
+    {
+        get => _listViewWidth;
+        set
+        {
+            if (value.Equals(_listViewWidth)) return;
+
+            SetField(ref _listViewWidth, value);
+            OnPropertyChanged(nameof(LeaderboardItemWrapper.PixelWidth));
+        }
+    }
+
     public Command LoadLeaderboardCommand { get; }
 
     public IEnumerable<LeaderboardItemWrapper> Leaderboard =>
@@ -50,20 +51,17 @@ public class LeaderboardPageViewModel : BaseViewModel
             .OrderBy(wrapper => Math.Abs(wrapper.LeaderboardItem.Amount)) ??
         Enumerable.Empty<LeaderboardItemWrapper>();
 
+    public decimal MaxAmount { get; private set; }
+
     private void LoadLeaderboard() => Task.Run(async () =>
     {
         await LoadOnTask(Repository.FetchLeaderboard(Group.Id));
         OnPropertyChanged(nameof(Leaderboard));
     });
-
-    public decimal MaxAmount { get; private set; }
 }
 
 public record LeaderboardItemWrapper : INotifyPropertyChanged
 {
-    public LeaderboardItem LeaderboardItem { get; }
-    private LeaderboardPageViewModel LeaderboardPageViewModel { get; }
-
     public LeaderboardItemWrapper(LeaderboardItem LeaderboardItem, LeaderboardPageViewModel LeaderboardPageViewModel)
     {
         this.LeaderboardItem = LeaderboardItem;
@@ -75,6 +73,9 @@ public record LeaderboardItemWrapper : INotifyPropertyChanged
                 OnPropertyChanged(nameof(PixelWidth));
         };
     }
+
+    public LeaderboardItem LeaderboardItem { get; }
+    private LeaderboardPageViewModel LeaderboardPageViewModel { get; }
 
     public int PixelWidth
     {
@@ -94,4 +95,4 @@ public record LeaderboardItemWrapper : INotifyPropertyChanged
 
     private void OnPropertyChanged([CallerMemberName] string? propertyName = null) =>
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-};
+}

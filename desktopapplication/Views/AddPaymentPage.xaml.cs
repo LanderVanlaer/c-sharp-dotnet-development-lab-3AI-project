@@ -5,8 +5,8 @@ namespace desktopapplication.Views;
 
 public partial class AddPaymentPage : ContentPage
 {
-    private readonly AddPaymentPageViewModel _viewModel;
     private readonly Group _group;
+    private readonly AddPaymentPageViewModel _viewModel;
 
     public AddPaymentPage(Group group)
     {
